@@ -16,18 +16,15 @@
     --accent: #6c63ff;
     --accent-hover: #5a52d5;
     --accent-light: #eeecff;
-    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    --pin-bg: #fffbeb;
+    --pin-border: #f59e0b;
+    --pin-text: #78350f;
+    --pin-title: #92400e;
+    --code-bg: #1e1e2e;
+    --code-text: #cdd6f4;
+    --sidebar-width: 272px;
     --header-h: 56px;
-    --bg2: var(--bg-secondary);
-    --bg3: var(--bg-tertiary);
-    --text2: var(--text-secondary);
-    --text3: var(--text-secondary);
-    --note-bg: #eff6ff;
-    --note-border: #3b5bdb;
-    --tag-bg: var(--accent-light);
-    --tag-text: var(--accent);
-    --accent2: #e91e8c;
-    --highlight: var(--accent);
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
   }
   [data-theme="dark"] {
     --bg: #0f1117;
@@ -39,17 +36,13 @@
     --accent: #818cf8;
     --accent-hover: #6366f1;
     --accent-light: #1e1f3a;
+    --pin-bg: #1c1500;
+    --pin-border: #d97706;
+    --pin-text: #fde68a;
+    --pin-title: #fcd34d;
+    --code-bg: #0d1117;
+    --code-text: #e6edf3;
     --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
-    --bg2: var(--bg-secondary);
-    --bg3: var(--bg-tertiary);
-    --text2: var(--text-secondary);
-    --text3: var(--text-secondary);
-    --note-bg: #1a2340;
-    --note-border: #3b5bdb;
-    --tag-bg: #1e2d4a;
-    --tag-text: #93c5fd;
-    --accent2: #a78bfa;
-    --highlight: #7c3aed;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -68,7 +61,7 @@
     top: 0; left: 0;
     width: 260px;
     height: 100vh;
-    background: var(--bg2);
+    background: var(--bg-secondary);
     border-right: 1px solid var(--border);
     overflow-y: auto;
     z-index: 100;
@@ -82,7 +75,7 @@
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
-    background: var(--bg2);
+    background: var(--bg-secondary);
     z-index: 10;
   }
 
@@ -112,14 +105,14 @@
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: var(--text3);
+    color: var(--text-secondary);
     font-family: 'Courier New', monospace;
   }
 
   .sidebar-nav a {
     display: block;
     padding: 6px 20px;
-    color: var(--text2);
+    color: var(--text-secondary);
     text-decoration: none;
     font-size: 13px;
     line-height: 1.4;
@@ -139,7 +132,7 @@
     position: fixed;
     top: 0; left: 260px; right: 0;
     height: 52px;
-    background: var(--bg2);
+    background: var(--bg-secondary);
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -150,7 +143,7 @@
 
   .topbar-label {
     font-size: 12px;
-    color: var(--text3);
+    color: var(--text-secondary);
     font-family: 'Courier New', monospace;
     letter-spacing: 1px;
   }
@@ -181,7 +174,7 @@
     position: fixed;
     top: 14px; left: 14px;
     z-index: 200;
-    background: var(--bg3);
+    background: var(--bg-tertiary);
     border: 1px solid var(--border);
     color: var(--text);
     width: 36px; height: 36px;
@@ -237,7 +230,7 @@
 
   .hero-sub {
     font-size: 16px;
-    color: var(--text2);
+    color: var(--text-secondary);
     max-width: 560px;
     line-height: 1.7;
     margin-bottom: 28px;
@@ -253,8 +246,8 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: var(--tag-bg);
-    color: var(--tag-text);
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 12px;
@@ -267,7 +260,7 @@
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 3px;
-    color: var(--accent2);
+    color: var(--accent);
     display: block;
     margin-bottom: 10px;
   }
@@ -295,19 +288,19 @@
   }
 
   section p {
-    color: var(--text2);
+    color: var(--text-secondary);
     margin-bottom: 16px;
   }
 
   /* Callout note */
   .note {
-    background: var(--note-bg);
-    border-left: 3px solid var(--note-border);
+    background: var(--bg-tertiary);
+    border-left: 3px solid var(--border);
     border-radius: 0 8px 8px 0;
     padding: 16px 20px;
     margin: 24px 0;
     font-size: 15px;
-    color: var(--text2);
+    color: var(--text-secondary);
   }
 
   .note strong {
@@ -322,7 +315,7 @@
 
   /* Quote */
   blockquote {
-    border-left: 3px solid var(--accent2);
+    border-left: 3px solid var(--accent);
     padding: 12px 20px;
     margin: 24px 0;
     background: rgba(167,139,250,0.05);
@@ -340,7 +333,7 @@
   }
 
   th {
-    background: var(--bg3);
+    background: var(--bg-tertiary);
     color: var(--accent);
     text-align: left;
     padding: 10px 14px;
@@ -354,7 +347,7 @@
   td {
     padding: 10px 14px;
     border-bottom: 1px solid var(--border);
-    color: var(--text2);
+    color: var(--text-secondary);
     vertical-align: top;
   }
 
@@ -364,25 +357,25 @@
 
   /* Architecture diagram */
   .diagram {
-    background: var(--bg2);
+    background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 28px 32px;
     margin: 28px 0;
     font-family: 'Courier New', monospace;
     font-size: 14px;
-    color: var(--text2);
+    color: var(--text-secondary);
     line-height: 2;
   }
 
   .diagram .user { color: var(--accent); }
-  .diagram .orch { color: var(--accent2); }
+  .diagram .orch { color: var(--accent); }
   .diagram .agent { color: #34d399; }
   .diagram .mcp { color: #fb923c; }
 
   /* Course card */
   .course-card {
-    background: var(--bg2);
+    background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 22px 24px;
@@ -402,7 +395,7 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    background: linear-gradient(90deg, var(--accent), var(--accent));
     opacity: 0;
     transition: opacity 0.2s;
   }
@@ -439,14 +432,14 @@
 
   .course-platform {
     font-size: 11px;
-    color: var(--text3);
+    color: var(--text-secondary);
     font-family: 'Courier New', monospace;
     margin-bottom: 8px;
   }
 
   .course-desc {
     font-size: 14px;
-    color: var(--text2);
+    color: var(--text-secondary);
     line-height: 1.6;
     margin-bottom: 10px;
   }
@@ -480,12 +473,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: var(--bg3);
+    background: var(--bg-tertiary);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 10px 16px;
     font-size: 13px;
-    color: var(--text2);
+    color: var(--text-secondary);
   }
 
   .level-num {
@@ -514,19 +507,19 @@
   .poll-bar-wrap {
     flex: 1;
     height: 6px;
-    background: var(--bg3);
+    background: var(--bg-tertiary);
     border-radius: 3px;
     overflow: hidden;
   }
 
   .poll-bar {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    background: linear-gradient(90deg, var(--accent), var(--accent));
     border-radius: 3px;
     transition: width 1s ease;
   }
 
-  .poll-label { color: var(--text2); flex: 2; font-size: 13px; }
+  .poll-label { color: var(--text-secondary); flex: 2; font-size: 13px; }
 
   /* Glossary */
   .glossary-grid {
@@ -537,7 +530,7 @@
   }
 
   .gloss-item {
-    background: var(--bg2);
+    background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 14px 16px;
@@ -552,7 +545,7 @@
   }
 
   .gloss-def {
-    color: var(--text2);
+    color: var(--text-secondary);
     font-size: 13px;
     line-height: 1.5;
   }
@@ -570,7 +563,7 @@
   .step-num {
     flex-shrink: 0;
     width: 28px; height: 28px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    background: linear-gradient(135deg, var(--accent), var(--accent));
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -582,7 +575,7 @@
     font-family: 'Courier New', monospace;
   }
 
-  .step-text { color: var(--text2); font-size: 15px; line-height: 1.6; }
+  .step-text { color: var(--text-secondary); font-size: 15px; line-height: 1.6; }
   .step-text strong { color: var(--text); }
 
   /* Footer */
@@ -591,7 +584,7 @@
     padding: 32px 64px;
     border-top: 1px solid var(--border);
     font-size: 13px;
-    color: var(--text3);
+    color: var(--text-secondary);
     font-family: 'Courier New', monospace;
   }
 
