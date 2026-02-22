@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Professional Playbook — Ксения</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+Pro:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          --bg: #ffffff;
+          --bg-secondary: #f8f9fa;
+          --bg-tertiary: #f1f3f5;
+          --text: #1a1a2e;
+          --text-secondary: #6c757d;
+          --border: #e9ecef;
+          --accent: #6c63ff;
+          --accent-hover: #5a52d5;
+          --accent-light: #eeecff;
+          --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+          --header-h: 56px;
+          --bg-primary: var(--bg);
+          --text-primary: var(--text);
+          --text-muted: var(--text-secondary);
+          --code-bg: var(--bg-tertiary);
+          --bg-sidebar: #2c2c2c;
+          --text-sidebar: #e8e6e3;
+        }
+        [data-theme="dark"] {
+          --bg: #0f1117;
+          --bg-secondary: #171b26;
+          --bg-tertiary: #1e2230;
+          --text: #e2e8f0;
+          --text-secondary: #8892a4;
+          --border: #2a2f3e;
+          --accent: #818cf8;
+          --accent-hover: #6366f1;
+          --accent-light: #1e1f3a;
+          --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
+          --bg-primary: var(--bg);
+          --text-primary: var(--text);
+          --text-muted: var(--text-secondary);
+          --code-bg: var(--bg-tertiary);
+          --bg-sidebar: var(--bg-secondary);
+          --text-sidebar: var(--text);
+        }
+        .theme-toggle {
+          display: flex; align-items: center; gap: 7px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border);
+          cursor: pointer;
+          padding: 6px 14px;
+          border-radius: 20px;
+          font-size: 13px;
+          color: var(--text);
+          transition: all 0.15s;
+          white-space: nowrap;
+          margin-top: 0.75rem;
+        }
+        .theme-toggle:hover {
+          background: var(--accent-light);
+          border-color: var(--accent);
+          color: var(--accent);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Source Sans Pro', sans-serif; font-size: 17px; line-height: 1.75; color: var(--text-primary); background: var(--bg-primary); }
+        .container { display: flex; min-height: 100vh; }
+        .sidebar { width: 280px; background: var(--bg-sidebar); color: var(--text-sidebar); padding: 2rem 0; position: fixed; height: 100vh; overflow-y: auto; z-index: 100; }
+        .sidebar-header { padding: 0 1.5rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.5rem; }
+        .sidebar-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; color: #fff; letter-spacing: 0.5px; }
+        .sidebar-header p { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 0.25rem; }
+        .nav-section { margin-bottom: 1.5rem; }
+        .nav-section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.4); padding: 0 1.5rem; margin-bottom: 0.75rem; }
+        .nav-link { display: block; padding: 0.6rem 1.5rem; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.95rem; transition: all 0.2s ease; border-left: 3px solid transparent; }
+        .nav-link:hover { color: #fff; background: rgba(255,255,255,0.05); border-left-color: var(--accent-light); }
+        .nav-link.active { color: #fff; background: rgba(255,255,255,0.08); border-left-color: var(--accent-light); }
+        .main { flex: 1; margin-left: 280px; padding: 3rem 4rem; max-width: 900px; }
+        h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 500; color: var(--text-primary); }
+        .chapter-title { font-size: 2.5rem; margin-bottom: 0.5rem; line-height: 1.2; }
+        .chapter-subtitle { font-size: 1.1rem; color: var(--text-muted); font-style: italic; margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+        h2 { font-size: 1.75rem; margin: 3rem 0 1.25rem; padding-top: 1rem; }
+        h3 { font-size: 1.35rem; margin: 2rem 0 1rem; color: var(--accent); }
+        h4 { font-size: 1.1rem; margin: 1.5rem 0 0.75rem; font-weight: 600; }
+        p { margin-bottom: 1.25rem; }
+        .section { display: none; animation: fadeIn 0.4s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .expandable { margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--bg-secondary); }
+        .expandable-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; transition: background 0.2s ease; }
+        .expandable-header:hover { background: rgba(0,0,0,0.02); }
+        .expandable-header::after { content: '+'; font-size: 1.25rem; color: var(--accent); transition: transform 0.3s ease; }
+        .expandable.open .expandable-header::after { content: '−'; }
+        .expandable-content { display: none; padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--border); }
+        .expandable.open .expandable-content { display: block; }
+        .insight-block { background: linear-gradient(135deg, var(--bg-secondary) 0%, #f8f6f2 100%); border-left: 4px solid var(--accent); padding: 1.5rem; margin: 2rem 0; border-radius: 0 8px 8px 0; }
+        .insight-block p { margin-bottom: 0; font-style: italic; color: var(--text-secondary); }
+        .insight-block .source { display: block; margin-top: 0.75rem; font-size: 0.85rem; font-style: normal; color: var(--text-muted); }
+        .research-block { background: #f8f7f5; border: 1px solid var(--border); padding: 1.25rem; margin: 1.5rem 0; border-radius: 8px; font-size: 0.95rem; }
+        .research-block-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 0.5rem; }
+        ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        .schema { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 2rem 0; text-align: center; }
+        .schema svg { max-width: 100%; height: auto; }
+        .schema-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--text-secondary); margin-top: 1rem; }
+        .cycle-diagram { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin: 2rem 0; }
+        .cycle-step { background: var(--bg-secondary); border: 2px solid var(--border); border-radius: 50%; width: 120px; height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; transition: all 0.3s ease; }
+        .cycle-step:hover { border-color: var(--accent); transform: scale(1.05); }
+        .cycle-step .number { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; color: var(--accent); font-weight: 600; }
+        .cycle-step .label { font-size: 0.75rem; text-align: center; padding: 0 0.5rem; color: var(--text-secondary); }
+        .cycle-arrow { color: var(--accent-light); font-size: 1.5rem; align-self: center; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
+        .comparison-table th { background: var(--bg-secondary); padding: 1rem; text-align: left; font-weight: 600; border-bottom: 2px solid var(--border); }
+        .comparison-table td { padding: 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+        .comparison-table tr:hover { background: rgba(139, 90, 43, 0.03); }
+        .fit-indicator { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+        .fit-high { background: #e8f5e9; color: #2e7d32; }
+        .fit-medium { background: #fff3e0; color: #ef6c00; }
+        .fit-gap { background: #fce4ec; color: #c62828; }
+        .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .skill-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: all 0.2s ease; }
+        .skill-card:hover { border-color: var(--accent-light); transform: translateY(-2px); }
+        .skill-card h4 { margin: 0 0 0.5rem; font-size: 1rem; }
+        .skill-card p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+        .timeline { position: relative; padding-left: 2rem; margin: 2rem 0; }
+        .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--border); }
+        .timeline-item { position: relative; padding-bottom: 2rem; }
+        .timeline-item::before { content: ''; position: absolute; left: -2rem; top: 0.5rem; width: 12px; height: 12px; background: var(--accent); border-radius: 50%; transform: translateX(-5px); }
+        .timeline-item h4 { margin: 0 0 0.25rem; }
+        .timeline-item .period { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .resource-card { display: flex; gap: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin: 1rem 0; align-items: flex-start; }
+        .resource-icon { width: 40px; height: 40px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.25rem; flex-shrink: 0; }
+        .resource-content h4 { margin: 0 0 0.25rem; font-size: 1rem; }
+        .resource-content p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+        .resource-tag { display: inline-block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; background: var(--accent); color: #fff; padding: 0.15rem 0.5rem; border-radius: 3px; margin-top: 0.5rem; }
+        .trait-card { border-left: 4px solid var(--accent); background: var(--bg-secondary); padding: 1.25rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
+        .trait-card.shadow { border-left-color: #9e9e9e; }
+        .trait-card h4 { margin: 0 0 0.5rem; }
+        @media (max-width: 900px) {
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+            .sidebar.open { transform: translateX(0); }
+            .main { margin-left: 0; padding: 2rem 1.5rem; }
+            .menu-toggle { display: block; position: fixed; top: 1rem; left: 1rem; z-index: 101; background: var(--bg-sidebar); color: #fff; border: none; padding: 0.75rem 1rem; border-radius: 8px; cursor: pointer; }
+        }
+        @media (min-width: 901px) { .menu-toggle { display: none; } }
+        @media print { .sidebar { display: none; } .main { margin-left: 0; } .section { display: block !important; page-break-before: always; } }
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰ Меню</button>
+    <div class="container">
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>Professional Playbook</h1>
+                <p>Ксения · 2026</p>
+                <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙 Тёмная</button>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Введение</div>
+                <a href="#intro" class="nav-link active" onclick="showSection('intro')">Предисловие</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Часть I. Кто я</div>
+                <a href="#psychotype" class="nav-link" onclick="showSection('psychotype')">Психотип и когнитивный стиль</a>
+                <a href="#pattern" class="nav-link" onclick="showSection('pattern')">Повторяющийся паттерн</a>
+                <a href="#strengths" class="nav-link" onclick="showSection('strengths')">Сильные стороны</a>
+                <a href="#shadows" class="nav-link" onclick="showSection('shadows')">Теневые зоны</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Часть II. Мой путь</div>
+                <a href="#memoirs" class="nav-link" onclick="showSection('memoirs')">Ключевые этапы</a>
+                <a href="#lessons" class="nav-link" onclick="showSection('lessons')">Уроки и инсайты</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Часть III. Куда я иду</div>
+                <a href="#formula" class="nav-link" onclick="showSection('formula')">Профессиональная формула</a>
+                <a href="#roles" class="nav-link" onclick="showSection('roles')">Подходящие роли</a>
+                <a href="#vacancies" class="nav-link" onclick="showSection('vacancies')">Анализ вакансий</a>
+                <a href="#directions" class="nav-link" onclick="showSection('directions')">Карьерные направления</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Часть IV. Ресурсы</div>
+                <a href="#learning" class="nav-link" onclick="showSection('learning')">Что изучать</a>
+                <a href="#tools" class="nav-link" onclick="showSection('tools')">Инструменты</a>
+                <a href="#checklist" class="nav-link" onclick="showSection('checklist')">Чек-лист действий</a>
+            </div>
+        </nav>
+        <main class="main">
+            <!-- INTRO -->
+            <section id="intro" class="section active">
+                <h1 class="chapter-title">Предисловие</h1>
+                <p class="chapter-subtitle">Книга о человеке, который повышает разрешение реальности</p>
+                <p>Эта книга — не резюме и не план развития в традиционном понимании. Это исследование: попытка увидеть себя так, как видит аналитик — со стороны, в динамике, с доказательствами.</p>
+                <p>Материалы, на которых основан этот документ, собирались более двух лет: консультации с карьерными психологами, записи голосовых сообщений, разборы психотипа, рабочие мемуары, анализ повторяющихся паттернов, гипотезы о поиске работы. Всё это было переработано, обезличено и дополнено научными источниками.</p>
+                <div class="insight-block">
+                    <p>«Ты — не человек, который увеличивает объём. Ты — человек, который повышает разрешение реальности.»</p>
+                    <span class="source">— из карьерного разбора, 2025</span>
+                </div>
+                <h2>Зачем эта книга</h2>
+                <p>Чтобы перестать начинать с нуля каждый раз, когда нужно объяснить себя — себе или кому-то ещё. Чтобы иметь точку опоры в моменты, когда внутренний голос говорит: «ты ничего не сделала», «это же несложно», «настоящие специалисты делают по-другому».</p>
+                <p>Эта книга — инструкция к себе. Карта местности, которую можно открыть в тумане.</p>
+                <h2>Как читать</h2>
+                <p>Книга построена как навигация: от понимания себя — к конкретным действиям. Каждый раздел можно читать отдельно. Блоки с научными источниками помечены отдельно — они подтверждают выводы, но не обязательны для первого прочтения.</p>
+                <p>Используй боковую панель для навигации. Разворачиваемые блоки содержат дополнительную информацию — открывай их, когда нужна глубина.</p>
+            </section>
+
+            <!-- PSYCHOTYPE -->
+            <section id="psychotype" class="section">
+                <h1 class="chapter-title">Психотип и когнитивный стиль</h1>
+                <p class="chapter-subtitle">Глубинный тип мышления в мире скорости</p>
+                <h2>Базовый профиль</h2>
+                <p>Ксения относится к категории людей с высокой сенсорной чувствительностью (Highly Sensitive Person, HSP) — это не диагноз и не слабость, а особенность нервной системы, которая влияет на способ обработки информации.</p>
+                <div class="research-block">
+                    <div class="research-block-title">Научный контекст</div>
+                    <p>Исследование Osaka University (2024) показало, что около 26% работающих взрослых относятся к HSP. При этом высокочувствительные люди демонстрируют повышенный уровень эмпатии, что делает их ценными в ролях, требующих межличностных навыков.</p>
+                    <p><em>Источник: Ioku & Watamura, Japanese Journal of Applied Psychology, 2024</em></p>
+                </div>
+                <h3>Ключевые характеристики</h3>
+                <div class="trait-card">
+                    <h4>Глубокая обработка информации</h4>
+                    <p>Ты не просто воспринимаешь данные — ты их перерабатываешь на нескольких уровнях одновременно. Это требует времени, но даёт результат, недоступный «быстрым» специалистам: способность видеть связи, которые другие пропускают.</p>
+                </div>
+                <div class="trait-card">
+                    <h4>Высокая рефлексия</h4>
+                    <p>Постоянный внутренний диалог, анализ происходящего, попытка понять «почему так». Это создаёт глубину понимания, но может приводить к overthinking в ситуациях, требующих быстрых решений.</p>
+                </div>
+                <div class="trait-card">
+                    <h4>Эмпатия и тонкое восприятие</h4>
+                    <p>Способность считывать состояние других людей, атмосферу в команде, невысказанные напряжения. В хаотичных средах это становится и силой (видишь проблемы раньше других), и уязвимостью (перегружаешься от чужих эмоций).</p>
+                </div>
+                <h2>Когнитивный стиль: архитектор, не исполнитель</h2>
+                <p>Анализ рабочих паттернов показывает устойчивую особенность: ты работаешь на уровне систем, а не задач. Там, где другие видят список дел, ты видишь структуру, логику, архитектуру.</p>
+                <div class="schema">
+                    <svg width="500" height="200" viewBox="0 0 500 200">
+                        <defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#d4a574;stop-opacity:1" /><stop offset="100%" style="stop-color:#8b5a2b;stop-opacity:1" /></linearGradient></defs>
+                        <rect x="50" y="140" width="400" height="40" rx="5" fill="#f5f3ef" stroke="#e0dcd4"/>
+                        <text x="250" y="165" text-anchor="middle" fill="#888" font-size="14">Задачи (execution)</text>
+                        <rect x="50" y="90" width="400" height="40" rx="5" fill="#ebe7df" stroke="#e0dcd4"/>
+                        <text x="250" y="115" text-anchor="middle" fill="#666" font-size="14">Процессы (management)</text>
+                        <rect x="50" y="40" width="400" height="40" rx="5" fill="url(#grad1)" stroke="#8b5a2b"/>
+                        <text x="250" y="65" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">Системы и смыслы (architecture)</text>
+                        <path d="M 470 160 L 470 50 L 480 60 M 470 50 L 460 60" stroke="#8b5a2b" stroke-width="2" fill="none"/>
+                        <text x="490" y="105" fill="#8b5a2b" font-size="12" transform="rotate(-90 490 105)">твой фокус</text>
+                    </svg>
+                    <div class="schema-title">Уровни работы: ты естественно тяготеешь к верхнему</div>
+                </div>
+                <h2>Денежный сценарий</h2>
+                <p>Оптимальные роли для монетизации твоих способностей:</p>
+                <ul>
+                    <li><strong>Архитектор смысла / AI-архитектор</strong> — проектирование систем, где AI и люди работают вместе</li>
+                    <li><strong>Стратег мягкого уровня</strong> — не директивное управление, а направление через ясность</li>
+                    <li><strong>Навигатор сложных задач</strong> — помощь командам в ситуациях неопределённости</li>
+                </ul>
+                <div class="expandable">
+                    <div class="expandable-header">Что даёт ресурс и деньги</div>
+                    <div class="expandable-content">
+                        <ul>
+                            <li>Глубокие проекты с временем на осмысление</li>
+                            <li>Живые творческие среды, где ценится психология</li>
+                            <li>Места, где решения важнее скорости</li>
+                            <li>Команды, которые ценят архитектуру, а не только delivery</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="expandable">
+                    <div class="expandable-header">Что выжигает</div>
+                    <div class="expandable-content">
+                        <ul>
+                            <li>Хаотичные команды без ясных границ</li>
+                            <li>Реактивная операционка (тушение пожаров)</li>
+                            <li>Чистые координаторские роли без влияния на смысл</li>
+                            <li>Среды, где скорость = компетентность</li>
+                            <li>Руководители, которые меняют направление каждые два дня</li>
+                        </ul>
+                    </div>
+                </div>
+                <h2>Реакция на конфликт</h2>
+                <p>Типичная последовательность: <strong>избегание → застывание → анализ → вина</strong></p>
+                <p>Это не трусость — это «freeze»-реакция, сформированная в ситуациях, где конфликт угрожал значимым отношениям. Ты не боишься конфликта как такового. Ты боишься потери связи.</p>
+            </section>
+            <!-- PATTERN -->
+            <section id="pattern" class="section">
+                <h1 class="chapter-title">Повторяющийся паттерн</h1>
+                <p class="chapter-subtitle">Цикл, который проявляется в каждом проекте</p>
+                <p>Анализ четырёх основных этапов карьеры выявил устойчивый цикл из шести шагов. Этот паттерн повторяется независимо от отрасли, размера компании и должности.</p>
+                <div class="cycle-diagram">
+                    <div class="cycle-step"><span class="number">1</span><span class="label">Вход в хаос</span></div>
+                    <span class="cycle-arrow">→</span>
+                    <div class="cycle-step"><span class="number">2</span><span class="label">Диагностика</span></div>
+                    <span class="cycle-arrow">→</span>
+                    <div class="cycle-step"><span class="number">3</span><span class="label">Создание формы</span></div>
+                    <span class="cycle-arrow">→</span>
+                    <div class="cycle-step"><span class="number">4</span><span class="label">Соединение</span></div>
+                    <span class="cycle-arrow">→</span>
+                    <div class="cycle-step"><span class="number">5</span><span class="label">Устойчивость</span></div>
+                    <span class="cycle-arrow">→</span>
+                    <div class="cycle-step" style="border-color: #9e9e9e;"><span class="number" style="color: #9e9e9e;">6</span><span class="label">Тяжесть</span></div>
+                </div>
+                <h2>Расшифровка цикла</h2>
+                <div class="expandable open">
+                    <div class="expandable-header">1. Вход в точку «ничего нет / всё развалено»</div>
+                    <div class="expandable-content">
+                        <p>Ты приходишь туда, где система не работает или не существует. Это может быть хаос, отсутствие процессов, неопределённость ролей. Именно здесь ты чувствуешь себя нужной.</p>
+                        <p><em>Примеры: OZON без LMS, художница без системы продвижения, компания без базы знаний.</em></p>
+                    </div>
+                </div>
+                <div class="expandable">
+                    <div class="expandable-header">2. Первая работа — собрать реальность</div>
+                    <div class="expandable-content">
+                        <p>Ты не начинаешь сразу «делать». Первое, что ты делаешь — диагностируешь систему: кто есть, что есть, как связано, где разрывы. Это невидимая, но критически важная работа.</p>
+                    </div>
+                </div>
+                <div class="expandable">
+                    <div class="expandable-header">3. Даёшь форму тому, чего не было</div>
+                    <div class="expandable-content">
+                        <p>Создаёшь структуру: не идеальную, но рабочую. Notion-базы, процессы, чек-листы, распределение ролей, голос бренда — всё, что превращает хаос в систему.</p>
+                    </div>
+                </div>
+                <div class="expandable">
+                    <div class="expandable-header">4. Соединяешь разрозненное</div>
+                    <div class="expandable-content">
+                        <p>HR ↔ IT, бизнес ↔ платформа, художник ↔ галерея. Ты становишься человеком, который переводит между мирами и делает так, чтобы части системы начали говорить на одном языке.</p>
+                    </div>
+                </div>
+                <div class="expandable">
+                    <div class="expandable-header">5. Система начинает работать без тебя</div>
+                    <div class="expandable-content">
+                        <p>Это момент успеха: то, что ты построила, функционирует. Другие могут использовать созданные тобой инструменты. Система стала самоподдерживающейся.</p>
+                    </div>
+                </div>
+                <div class="expandable">
+                    <div class="expandable-header">6. Когда хаоса больше нет — становится тяжело</div>
+                    <div class="expandable-content">
+                        <p>Парадокс: в момент максимального успеха ты чувствуешь себя хуже всего. Нет больше хаоса, который нужно структурировать. Остаётся «витрина, политика, показуха». Начинается выгорание.</p>
+                        <p><strong>Это не провал. Это сигнал: система больше не нуждается в архитекторе. Ей нужен оператор.</strong></p>
+                    </div>
+                </div>
+                <div class="insight-block">
+                    <p>«Ксения — человек, который входит в неопределённые системы, собирает реальность, создаёт рабочую форму и доводит её до устойчивости.»</p>
+                </div>
+                <h2>Научный контекст паттерна</h2>
+                <div class="research-block">
+                    <div class="research-block-title">Person-Job Fit Theory</div>
+                    <p>Исследование Zeng & Hu (2024) в Frontiers in Psychology показало, что несоответствие между личностью работника и требованиями роли — ключевой предиктор выгорания. Когда архитектор вынужден выполнять операционные задачи, это создаёт «fit mismatch» — системное напряжение.</p>
+                    <p><em>Вывод: твоё выгорание в стабильных системах — не личная проблема, а структурное несоответствие роли.</em></p>
+                </div>
+                <div class="research-block">
+                    <div class="research-block-title">Career Transition Research</div>
+                    <p>Dunford et al. (Journal of Applied Psychology) показали, что уровень выгорания значительно меняется в моменты карьерных переходов. Для людей с паттерном «строитель систем» выгорание снижается при входе в новый хаос и возрастает в стабильных фазах — что противоречит интуитивным ожиданиям.</p>
+                </div>
+                <h2>Что это значит практически</h2>
+                <p>Твой паттерн — не баг, а фича. Но он требует осознанного управления:</p>
+                <ul>
+                    <li><strong>Признай цикл</strong> — когда чувствуешь тяжесть в работающей системе, это сигнал, а не провал</li>
+                    <li><strong>Планируй выход</strong> — идеально передавать систему до того, как начнётся выгорание</li>
+                    <li><strong>Ищи новый хаос</strong> — следующий проект, который нуждается в архитекторе</li>
+                    <li><strong>Или меняй роль</strong> — переход на мета-уровень: обучение других строить системы</li>
+                </ul>
+            </section>
+
+            <!-- STRENGTHS -->
+            <section id="strengths" class="section">
+                <h1 class="chapter-title">Сильные стороны</h1>
+                <p class="chapter-subtitle">Способности, которые создают уникальную ценность</p>
+                <p>Эти силы проявляются во всех рабочих контекстах — от корпорации до арт-проекта. Они формируют твою профессиональную ДНК.</p>
+                <h2>Ядро компетенций</h2>
+                <div class="skill-grid">
+                    <div class="skill-card"><h4>Смысловая чувствительность</h4><p>Видишь, когда что-то «не то» — в коммуникации, в продукте, в направлении. Раньше других замечаешь расхождение между словами и реальностью.</p></div>
+                    <div class="skill-card"><h4>Языковая точность</h4><p>Умеешь найти правильные слова для сложных вещей. Формулируешь так, что люди говорят: «да, именно это я имел в виду».</p></div>
+                    <div class="skill-card"><h4>Системное мышление</h4><p>Видишь связи между частями, которые другие воспринимают отдельно. Понимаешь, как изменение в одном месте повлияет на всё остальное.</p></div>
+                    <div class="skill-card"><h4>AI-архитектура</h4><p>Используешь AI не как инструмент для отдельных задач, а как часть системы. Строишь workflows, агентов, процессы автоматизации.</p></div>
+                    <div class="skill-card"><h4>Удержание контекста</h4><p>Когда все тонут в деталях, ты единственная, кто помнит: «А мы вообще к чему идём?» Держишь рамку, когда среда распадается.</p></div>
+                    <div class="skill-card"><h4>Навигация в человеческих процессах</h4><p>Чувствуешь напряжения, читаешь между строк, понимаешь, что на самом деле происходит в команде.</p></div>
+                </div>
+                <h2>Что ты делаешь в любой команде</h2>
+                <div class="trait-card"><h4>Структурируешь хаос</h4><p>Разрозненные мысли → карта. Бесконечный поток задач → приоритеты. Туман → конкретные шаги. Эмоции → понятный смысловой язык.</p></div>
+                <div class="trait-card"><h4>Создаёшь пространство ясности</h4><p>С тобой люди начинают говорить понятнее. Конфликты гаснут, решение находится, движение продолжается. Появляется чувство «мы снова понимаем, что делаем».</p></div>
+                <div class="trait-card"><h4>Соединяешь смысл и действие</h4><p>Не только про психологию — про практику: понимаешь цель, видишь путь, формируешь рамку, запускаешь движение.</p></div>
+                <div class="trait-card"><h4>Собираешь то, что можно передать</h4><p>Не «один раз сделать», а карта, процесс, принципы, шаблон, основа — то, на чём могут стоять другие.</p></div>
+                <h2>Контекст силы</h2>
+                <p>Где твои способности раскрываются максимально:</p>
+                <div class="schema">
+                    <svg width="500" height="280" viewBox="0 0 500 280">
+                        <circle cx="150" cy="100" r="70" fill="#f5f3ef" stroke="#8b5a2b" stroke-width="2"/>
+                        <text x="150" y="90" text-anchor="middle" fill="#8b5a2b" font-size="12" font-weight="600">Deep Work</text>
+                        <text x="150" y="105" text-anchor="middle" fill="#666" font-size="10">AI-проекты</text>
+                        <text x="150" y="118" text-anchor="middle" fill="#666" font-size="10">EdTech</text>
+                        <circle cx="350" cy="100" r="70" fill="#f5f3ef" stroke="#8b5a2b" stroke-width="2"/>
+                        <text x="350" y="90" text-anchor="middle" fill="#8b5a2b" font-size="12" font-weight="600">Творческие</text>
+                        <text x="350" y="105" text-anchor="middle" fill="#666" font-size="10">Студии, бренды</text>
+                        <text x="350" y="118" text-anchor="middle" fill="#666" font-size="10">Авторские проекты</text>
+                        <circle cx="250" cy="200" r="70" fill="#f5f3ef" stroke="#8b5a2b" stroke-width="2"/>
+                        <text x="250" y="190" text-anchor="middle" fill="#8b5a2b" font-size="12" font-weight="600">Масштабные</text>
+                        <text x="250" y="205" text-anchor="middle" fill="#666" font-size="10">Компании нового типа</text>
+                        <text x="250" y="218" text-anchor="middle" fill="#666" font-size="10">AI-трансформация</text>
+                        <line x1="200" y1="140" x2="220" y2="160" stroke="#d4a574" stroke-width="1" stroke-dasharray="4"/>
+                        <line x1="300" y1="140" x2="280" y2="160" stroke="#d4a574" stroke-width="1" stroke-dasharray="4"/>
+                        <line x1="220" y1="100" x2="280" y2="100" stroke="#d4a574" stroke-width="1" stroke-dasharray="4"/>
+                    </svg>
+                    <div class="schema-title">Три типа сред, где проявляется твоя сила</div>
+                </div>
+                <div class="research-block">
+                    <div class="research-block-title">McKinsey: новые роли в AI-эру</div>
+                    <p>Согласно отчёту McKinsey «Agents, Robots, and Us» (2025), возникают новые профили: agent orchestrators (проектирование и управление AI-агентами), hybrid managers (управление смешанными командами людей и AI), AI coaches (интеграция AI в ежедневную работу).</p>
+                    <p>Твой набор навыков — системное мышление + AI-архитектура + человеческая чувствительность — точно соответствует этим новым ролям.</p>
+                </div>
+            </section>
+            <!-- SHADOWS -->
+            <section id="shadows" class="section">
+                <h1 class="chapter-title">Теневые зоны</h1>
+                <p class="chapter-subtitle">Паттерны, которые мешают, но которые можно трансформировать</p>
+                <p>Эти паттерны — не недостатки характера. Это защитные механизмы, сформированные в прошлом опыте. Они включаются автоматически, но их можно замечать и управлять ими.</p>
+                <h2>Шесть теневых паттернов</h2>
+                <div class="trait-card shadow"><h4>Тень №1: «Я должна быть лучшей, иначе меня не заметят»</h4><p>Самая сильная тень. Появляется, когда рядом кто-то делает быстрее, громче, увереннее. Включает сравнение, ощущение угрозы, мысль «меня заменят».</p><p><strong>Триггер:</strong> появление нового человека в команде, чей-то быстрый результат.</p><p><strong>Антидот:</strong> напоминание, что твоя ценность — в глубине, а не в скорости. Разные роли, не конкуренция.</p></div>
+                <div class="trait-card shadow"><h4>Тень №2: «Если я не тяну всё — я провалилась»</h4><p>Автоматический режим из прошлого опыта: контроль → сверхответственность → выгорание → вина.</p><p><strong>Триггер:</strong> ощущение, что «без меня всё развалится».</p><p><strong>Антидот:</strong> делегирование. Система должна работать без одного человека — это признак хорошей системы, не твоего провала.</p></div>
+                <div class="trait-card shadow"><h4>Тень №3: «Мне нужно разрешение, чтобы существовать»</h4><p>Тревога при неясных границах: «могу ли я это делать?», «почему решили без меня?». Страх быть лишней.</p><p><strong>Триггер:</strong> решения без твоего участия, неопределённость роли.</p><p><strong>Антидот:</strong> запрашивать ясность границ на старте. Фиксировать договорённости письменно.</p></div>
+                <div class="trait-card shadow"><h4>Тень №4: «Я самозванец среди взрослых»</h4><p>Когда рядом люди старше, громче, опытнее — включается: «они настоящие, а я играю роль», «они сейчас раскусят».</p><p><strong>Триггер:</strong> присутствие авторитетных фигур, экспертная среда.</p><p><strong>Антидот:</strong> список конкретных достижений. Факты против ощущений.</p></div>
+                <div class="trait-card shadow"><h4>Тень №5: «Я должна быть удобной»</h4><p>Сглаживание углов, избегание разговора о деньгах, неспособность защитить свои решения. Страх казаться «жадной» или «конфликтной».</p><p><strong>Триггер:</strong> необходимость отстоять границы или цену.</p><p><strong>Антидот:</strong> заранее подготовленные формулировки. Практика «неудобных» разговоров в безопасной среде.</p></div>
+                <div class="trait-card shadow"><h4>Тень №6: «Моего вклада никто не видит»</h4><p>Твой труд невидим: структура, смысл, направление, логика — это не яркие результаты. Тень убеждает: «меня не замечают = я ничего не стою».</p><p><strong>Триггер:</strong> чужие «яркие» действия, отсутствие признания.</p><p><strong>Антидот:</strong> документирование своего вклада. «До/после» артефакты.</p></div>
+                <h2>Научный контекст</h2>
+                <div class="research-block">
+                    <div class="research-block-title">Импостер-синдром: системный взгляд</div>
+                    <p>Мета-анализ Frontiers in Psychology (2024) показал, что импостер-феномен — не индивидуальная патология, а часто реакция на дисфункциональный контекст. Исследователи предлагают смещать фокус с «исправления человека» на «исправление среды».</p>
+                    <p>Ключевые факторы, усиливающие импостер-феномен: перфекционизм, низкая самоэффективность, отсутствие признания вклада. Все три — характерны для архитекторов систем, чья работа невидима.</p>
+                    <p><em>Источник: Para et al., Frontiers in Psychology, 2024</em></p>
+                </div>
+                <div class="research-block">
+                    <div class="research-block-title">Contextualizing the Impostor Syndrome</div>
+                    <p>Feenstra et al. (2020) аргументируют, что импостер-синдром непропорционально поражает группы, которые сталкиваются с негативными стереотипами. Для женщин в tech/AI это особенно релевантно: внешние сигналы постоянно намекают, что «это не твоё поле».</p>
+                    <p><strong>Вывод:</strong> ощущение «я не настоящий специалист» — это не твоя проблема. Это симптом системы, которая не умеет видеть твой тип вклада.</p>
+                </div>
+                <h2>Главная боль тени</h2>
+                <div class="insight-block">
+                    <p>«Если я не буду лучшей, нужной и идеальной — меня заменят и забудут.»</p>
+                    <p style="margin-top: 1rem; font-style: normal;">Эта фраза — не про реальность. Это про старую рану. Твоя суть — архитектор. Твоя тень — испуганный ребёнок, который хочет безопасности.</p>
+                </div>
+                <h2>Взлом паттерна</h2>
+                <p><strong>Негативный паттерн:</strong> «Если я не уверена на 100% — лучше не начинать».</p>
+                <p><strong>Действие:</strong> сделай один микрошаг неуверенной рукой. Не идеально. Не полностью. Просто сделай.</p>
+                <p><strong>Почему работает:</strong> создаёт новый нейронный контур — «я могу действовать без идеальности, и это безопасно». Тебе не нужна смелость. Тебе нужна нормализация несовершенства.</p>
+            </section>
+
+            <!-- MEMOIRS -->
+            <section id="memoirs" class="section">
+                <h1 class="chapter-title">Ключевые этапы</h1>
+                <p class="chapter-subtitle">Траектория, которая привела сюда</p>
+                <div class="timeline">
+                    <div class="timeline-item"><h4>Фармацевтическая дистрибуция</h4><div class="period">2013-2016</div><p>Начало карьеры в корпоративной среде. Первый опыт построения систем: создание работающих процессов там, где их не было. Столкновение с корпоративной политикой и понимание, что формальная иерархия ≠ реальное влияние.</p></div>
+                    <div class="timeline-item"><h4>Онлайн-ритейл: масштаб и хаос</h4><div class="period">2017-2021</div><p>Создание LMS-системы с нуля. Управление командой из 5 человек. Интеграция HR и IT. Первый опыт быть «мостом» между разными мирами. Здесь же — первое глубокое выгорание после того, как система заработала.</p><p><em>Ключевой инсайт: когда хаос закончился, работа потеряла смысл.</em></p></div>
+                    <div class="timeline-item"><h4>Арт-проект: творческий хаос</h4><div class="period">2023-2025</div><p>Работа с художницей: создание контент-системы, brand voice, Notion-базы, AI-агенты для автоматизации. Первый опыт интеграции AI в реальные рабочие процессы. Столкновение с обесцениванием: «ты справилась? а что ты собственно сделала?»</p><p><em>Ключевой инсайт: невидимая работа архитектора легко обесценивается.</em></p></div>
+                    <div class="timeline-item"><h4>Переход и поиск</h4><div class="period">2025-настоящее</div><p>Осознание паттерна. Работа с карьерными психологами. Освоение AI-инструментов на уровне архитектуры. Поиск роли, которая соответствует реальным способностям.</p></div>
+                </div>
+                <h2>Сквозные темы</h2>
+                <p>Что объединяет все этапы:</p>
+                <ul>
+                    <li><strong>Вход через хаос</strong> — каждый раз ты приходила туда, где «ничего нет»</li>
+                    <li><strong>Создание системы</strong> — и каждый раз строила работающую структуру</li>
+                    <li><strong>Невидимость вклада</strong> — результат становился «очевидным», как будто он был всегда</li>
+                    <li><strong>Выгорание после успеха</strong> — тяжесть появлялась не в хаосе, а в стабильности</li>
+                </ul>
+            </section>
+
+            <!-- LESSONS -->
+            <section id="lessons" class="section">
+                <h1 class="chapter-title">Уроки и инсайты</h1>
+                <p class="chapter-subtitle">Что стало понятно с течением времени</p>
+                <h2>Уроки из опыта</h2>
+                <div class="expandable open">
+                    <div class="expandable-header">О природе своей работы</div>
+                    <div class="expandable-content"><p>Твоя работа — не в задачах, а между задачами. Ты создаёшь условия, в которых задачи становятся выполнимыми. Это невидимая, но критически важная функция.</p><p>Ты не «делатель» — ты «создатель контекста для делания». И это профессия, хотя она пока не имеет устоявшегося названия.</p></div>
+                </div>
+                <div class="expandable">
+                    <div class="expandable-header">О границах и энергии</div>
+                    <div class="expandable-content"><p>4-6 часов глубокой работы — твой потолок. После этого качество падает, а восстановление занимает непропорционально много времени.</p><p>Это не слабость — это особенность когнитивного стиля. HSP тратят больше энергии на обработку информации. Учитывай это при планировании.</p><p><strong>Восстановление:</strong> одиночество, эксперименты с инструментами, чтение, кино, уборка. Социальное восстановление — не твой путь.</p></div>
+                </div>
+                <div class="expandable">
+                    <div class="expandable-header">О руководителях</div>
+                    <div class="expandable-content"><p>Тебе нужен руководитель, который:</p><ul><li>Даёт направление, а не микроменеджмент</li><li>Ценит глубину, а не скорость</li><li>Способен объяснить «зачем», а не только «что»</li><li>Не меняет приоритеты каждые два дня</li></ul><p>Руководитель, который сам находится в хаосе (как художница) — не твой формат. Ты не можешь быть архитектором для человека, который сам не знает, чего хочет.</p></div>
+                </div>
+                <div class="expandable">
+                    <div class="expandable-header">О деньгах и ценности</div>
+                    <div class="expandable-content"><p>Ты систематически недооцениваешь свой вклад. Это связано с двумя факторами:</p><ol><li>Невидимость работы архитектора — нет ярких артефактов</li><li>Внутренний критик, который обесценивает любой результат</li></ol><p><strong>Решение:</strong> документировать «до/после». Создавать видимые артефакты своего вклада. Сохранять фидбэк от других.</p></div>
+                </div>
+                <h2>Ключевые инсайты из диагностики</h2>
+                <div class="insight-block">
+                    <p>«Моё первое ощущение — это очень круто. А через секунду — кажется, что так можно больше и лучше. Может, это только мне кажется, что круто, а на самом деле это несложно.»</p>
+                    <span class="source">— о реакции на собственные достижения</span>
+                </div>
+                <p>Этот паттерн — мгновенное обесценивание — ключевой барьер. Он работает так:</p>
+                <ol>
+                    <li><strong>Достижение</strong> — ты что-то создала (агент, систему, процесс)</li>
+                    <li><strong>Первая реакция</strong> — «это очень круто» (здоровая)</li>
+                    <li><strong>Мгновенное обесценивание</strong> — «но можно лучше / это несложно / настоящие специалисты делают иначе»</li>
+                    <li><strong>Результат</strong> — достижение не присваивается, не становится частью самооценки</li>
+                </ol>
+                <div class="research-block">
+                    <div class="research-block-title">Механизм обесценивания</div>
+                    <p>Исследования импостер-феномена показывают, что люди с высокими достижениями часто атрибутируют свой успех внешним факторам (удаче, помощи других), а неудачи — внутренним (своей некомпетентности). Это создаёт асимметрию, где позитивный опыт не накапливается.</p>
+                    <p><em>Источник: Bravata et al., J Gen Intern Med, 2020</em></p>
+                </div>
+                <h2>О страхе перед вакансиями</h2>
+                <p>Анализ реакций на целевые вакансии показал характерный паттерн:</p>
+                <table class="comparison-table">
+                    <tr><th>Страх</th><th>Реальность</th></tr>
+                    <tr><td>«Я недостаточно погружена в AI»</td><td>Ты работаешь с AI ежедневно, построила агентов, автоматизации. Вакансии ищут операционных менеджеров, не ML-инженеров.</td></tr>
+                    <tr><td>«Настоящие специалисты знают архитектуру систем»</td><td>Целевые роли — не про системную архитектуру. Они про использование AI как инструмента в операционных процессах.</td></tr>
+                    <tr><td>«Работа поглотит всё время»</td><td>Это реальный риск. Но он зависит от выбора среды и договорённостей на старте, а не от роли как таковой.</td></tr>
+                    <tr><td>«Я не справлюсь»</td><td>Ты справлялась с более сложными ситуациями: LMS с нуля, команда 5 человек, интеграция HR-IT. Это сложнее, чем настройка чек-листов.</td></tr>
+                </table>
+            </section>
+            <!-- FORMULA -->
+            <section id="formula" class="section">
+                <h1 class="chapter-title">Профессиональная формула</h1>
+                <p class="chapter-subtitle">Кто ты как специалист — точное определение</p>
+                <h2>Ядро</h2>
+                <div class="insight-block">
+                    <p><strong>Ты — Архитектор смыслов и процессов. Мягкий лидер стратегической глубины.</strong></p>
+                    <p style="margin-top: 1rem; font-style: normal;">Это не корпоративная должность. Это тип мышления + тип влияния + тип присутствия.</p>
+                </div>
+                <p>Ты — человек, который:</p>
+                <ul>
+                    <li>Видит систему целиком, когда другие видят фрагменты</li>
+                    <li>Замечает, куда уходит энергия команды</li>
+                    <li>Формирует ясность, когда все запутались</li>
+                    <li>Оборачивает хаос в понятную форму</li>
+                    <li>Удерживает связь между людьми, задачами и смыслом</li>
+                    <li>Не давит — но влияет</li>
+                </ul>
+                <p>Это лидерство не сверху, а из центра. Ты — не «директор», а точка гравитации, вокруг которой система собирается.</p>
+                <h2>Профессиональный нарратив</h2>
+                <p><em>Как описать себя одним абзацем:</em></p>
+                <div class="insight-block">
+                    <p>«Смысловой архитектор и системный продюсер, который соединяет хаос, людей, смыслы, процессы и AI в одну работающую структуру. Сочетаю глубину понимания мотиваций и динамики людей с системным мышлением и чувствительностью к слабым сигналам. Работаю в точке, где сходятся смысл, структура, команда, продукт и AI-инструменты.»</p>
+                </div>
+                <h2>Уникальное предложение</h2>
+                <div class="schema">
+                    <svg width="500" height="300" viewBox="0 0 500 300">
+                        <circle cx="200" cy="150" r="100" fill="rgba(139, 90, 43, 0.1)" stroke="#8b5a2b" stroke-width="2"/>
+                        <circle cx="300" cy="150" r="100" fill="rgba(139, 90, 43, 0.1)" stroke="#8b5a2b" stroke-width="2"/>
+                        <circle cx="250" cy="230" r="100" fill="rgba(139, 90, 43, 0.1)" stroke="#8b5a2b" stroke-width="2"/>
+                        <text x="140" y="120" text-anchor="middle" fill="#8b5a2b" font-size="12" font-weight="600">Системное</text>
+                        <text x="140" y="135" text-anchor="middle" fill="#8b5a2b" font-size="12" font-weight="600">мышление</text>
+                        <text x="360" y="120" text-anchor="middle" fill="#8b5a2b" font-size="12" font-weight="600">AI-</text>
+                        <text x="360" y="135" text-anchor="middle" fill="#8b5a2b" font-size="12" font-weight="600">архитектура</text>
+                        <text x="250" y="280" text-anchor="middle" fill="#8b5a2b" font-size="12" font-weight="600">Человеческая</text>
+                        <text x="250" y="295" text-anchor="middle" fill="#8b5a2b" font-size="12" font-weight="600">чувствительность</text>
+                        <circle cx="250" cy="175" r="30" fill="#8b5a2b"/>
+                        <text x="250" y="172" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">Твоё</text>
+                        <text x="250" y="184" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">место</text>
+                    </svg>
+                    <div class="schema-title">Пересечение трёх зон создаёт уникальную позицию</div>
+                </div>
+                <h2>Конкурентные преимущества (2025-2030)</h2>
+                <div class="skill-grid">
+                    <div class="skill-card"><h4>AI-native мышление</h4><p>Ты не просто используешь AI — ты строишь системы вокруг него. Это редкость даже среди tech-специалистов.</p></div>
+                    <div class="skill-card"><h4>Смысл + Структура</h4><p>Редкое сочетание: эмоциональная чувствительность и строгая логика в одном человеке.</p></div>
+                    <div class="skill-card"><h4>Удержание поля</h4><p>Видишь динамику людей, смысл задач, слабые сигналы, точки расфокуса — до того, как команда начинает тонуть.</p></div>
+                    <div class="skill-card"><h4>Современный fit</h4><p>Ты естественно вписываешься в роли, которые стали востребованы только в 2024-2025: AI Workflow Designer, Creative Ops Lead.</p></div>
+                </div>
+            </section>
+
+            <!-- ROLES -->
+            <section id="roles" class="section">
+                <h1 class="chapter-title">Подходящие роли</h1>
+                <p class="chapter-subtitle">Позиции, которые соответствуют твоему профилю</p>
+                <h2>Естественные роли</h2>
+                <div class="resource-card"><div class="resource-icon">🏗️</div><div class="resource-content"><h4>AI-Enabled Content Strategist</h4><p>Проектирование контент-систем с интеграцией AI: от стратегии до workflow. Создание рамок, в которых AI и люди работают вместе.</p><span class="resource-tag">Высокий fit</span></div></div>
+                <div class="resource-card"><div class="resource-icon">⚙️</div><div class="resource-content"><h4>Creative Operations Lead</h4><p>Операционное управление творческими командами: процессы, ритмы, инструменты. Превращение хаоса в повторяемую систему.</p><span class="resource-tag">Высокий fit</span></div></div>
+                <div class="resource-card"><div class="resource-icon">🧭</div><div class="resource-content"><h4>Sense Architect / System Producer</h4><p>Роль, которую пока сложно найти в вакансиях, но которая описывает твою суть: создание смысловых и операционных систем для команд.</p><span class="resource-tag">Высокий fit</span></div></div>
+                <div class="resource-card"><div class="resource-icon">🤖</div><div class="resource-content"><h4>AI Workflow Designer</h4><p>Проектирование процессов, где AI выполняет рутину, а люди фокусируются на решениях. Новая роль, появившаяся в 2024-2025.</p><span class="resource-tag">Высокий fit</span></div></div>
+                <div class="resource-card"><div class="resource-icon">👥</div><div class="resource-content"><h4>Chief of Staff (Creative/Tech teams)</h4><p>Правая рука основателя или руководителя: операционка, координация, стратегическая поддержка. Требует высокого доверия.</p><span class="resource-tag">Средний fit</span></div></div>
+                <h2>Контексты, где ты востребована</h2>
+                <table class="comparison-table">
+                    <tr><th>Контекст</th><th>Почему подходит</th><th>На что обратить внимание</th></tr>
+                    <tr><td><strong>Стартапы на этапе роста</strong></td><td>Хаос есть, но уже понятно направление. Нужен человек, который превратит это в систему.</td><td>Проверь, есть ли ясность у основателей. Если её нет — будет тяжело.</td></tr>
+                    <tr><td><strong>EdTech / образовательные проекты</strong></td><td>Сочетание смысла, системы и работы с людьми. Естественная среда для твоего типа.</td><td>Убедись, что ценят качество, а не только метрики.</td></tr>
+                    <tr><td><strong>AI-компании нового типа</strong></td><td>Нужны люди, которые понимают и технологию, и людей. Это редкость.</td><td>Оцени команду: не все AI-компании здоровы.</td></tr>
+                    <tr><td><strong>Творческие студии и агентства</strong></td><td>Хаос как норма. Нужен человек, который держит систему.</td><td>Проверь, готовы ли платить за «невидимую» работу.</td></tr>
+                </table>
+                <h2>Роли, которых стоит избегать</h2>
+                <ul>
+                    <li><strong>Чистый исполнитель</strong> — нет влияния на систему, только задачи</li>
+                    <li><strong>Поддержка хаотичного визионера</strong> — если у основателя нет ясности, ты выгоришь</li>
+                    <li><strong>Большая корпорация без автономии</strong> — политика съест энергию</li>
+                    <li><strong>Роль «на подхвате»</strong> — без зоны ответственности</li>
+                </ul>
+            </section>
+
+            <!-- VACANCIES -->
+            <section id="vacancies" class="section">
+                <h1 class="chapter-title">Анализ вакансий</h1>
+                <p class="chapter-subtitle">Разбор целевых позиций: ELVA и gconf</p>
+                <h2>ELVA: Operations Manager</h2>
+                <div class="expandable open"><div class="expandable-header">О компании</div><div class="expandable-content"><p>ELVA — мобильное приложение с подпиской на эксклюзивный видеоконтент и AI-инструменты для его создания. Компания строит себя как продукт: убирает рутину, автоматизирует всё возможное, освобождает время людей для мышления и роста.</p></div></div>
+                <h3>Что они ищут</h3>
+                <ul>
+                    <li>Operations Manager (Strong Middle) с системным мышлением</li>
+                    <li>Человека, для которого AI и автоматизация — основной инструмент</li>
+                    <li>Того, кто оптимизирует, автоматизирует, наводит порядок в хаосе</li>
+                    <li>Комфортно в стартапе без готовых инструкций</li>
+                </ul>
+                <h3>Анализ соответствия</h3>
+                <table class="comparison-table">
+                    <tr><th>Требование</th><th>Твой профиль</th><th>Fit</th></tr>
+                    <tr><td>Системное мышление</td><td>Ядро твоего профиля — видеть систему целиком</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
+                    <tr><td>AI как основной инструмент</td><td>Ежедневная работа с Claude, ChatGPT, Cursor; построение агентов</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
+                    <tr><td>Порядок в хаосе</td><td>Это буквально твой паттерн — входить в хаос и создавать структуру</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
+                    <tr><td>No-code / low-code / automation</td><td>Notion, Make, базовая работа с API через AI-ассистентов</td><td><span class="fit-indicator fit-medium">○ Средний</span></td></tr>
+                    <tr><td>Координация с finance, legal, HR</td><td>Опыт HR-IT интеграции в корпорации</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
+                </table>
+                <div class="insight-block"><p><strong>Вердикт:</strong> Высокое соответствие. Основной риск — не недостаток навыков, а потенциальное поглощение работой. Важно на старте договориться о границах.</p></div>
+                <h2>gconf: Community & Operations Manager</h2>
+                <div class="expandable open"><div class="expandable-header">О компании</div><div class="expandable-content"><p>gconf делает интенсивы про новые отношения человека с AI — не как с инструментом, а как с партнёром. 3000+ выпускников, когорты каждые два месяца, два продукта (мета-навыки и вайбкодинг). Founder-led проект с фокусом на качество опыта и комьюнити.</p></div></div>
+                <h3>Роль</h3>
+                <p>Превратить поток идей в работающую систему. Фаундеры — смысл и продукт. Ты — процессы и развитие.</p>
+                <h3>Анализ соответствия</h3>
+                <table class="comparison-table">
+                    <tr><th>Требование</th><th>Твой профиль</th><th>Fit</th></tr>
+                    <tr><td>AI-first мышление</td><td>Работа с Claude, Cursor, ChatGPT, агенты</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
+                    <tr><td>Cursor, Claude Code, agentic workflows</td><td>Практический опыт с Cursor и Claude Code</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
+                    <tr><td>Высокая агентность, hands-on</td><td>Сильная сторона — при наличии ясного направления</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
+                    <tr><td>Работа с комьюнити</td><td>Меньше прямого опыта, но есть понимание динамики групп</td><td><span class="fit-indicator fit-medium">○ Средний</span></td></tr>
+                    <tr><td>Part-time (20ч/нед)</td><td>Соответствует твоему оптимальному формату</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
+                    <tr><td>Автономная работа при недоступности фаундеров</td><td>Сильная сторона — при ясных границах</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
+                </table>
+                <div class="insight-block"><p><strong>Вердикт:</strong> Высокое соответствие. Формат (part-time, remote, async) идеален. Риск: founder-led проект может означать частую смену направления. Важно понять, насколько фаундеры сами ясны в том, чего хотят.</p></div>
+                <h2>Сравнение вакансий</h2>
+                <table class="comparison-table">
+                    <tr><th>Критерий</th><th>ELVA</th><th>gconf</th></tr>
+                    <tr><td>Формат</td><td>Предположительно full-time</td><td>Part-time 20ч/нед</td></tr>
+                    <tr><td>Уровень хаоса</td><td>Высокий (стартап, нет инструкций)</td><td>Средний (устойчивый проект)</td></tr>
+                    <tr><td>AI-компонент</td><td>Ядро роли</td><td>Важная часть роли</td></tr>
+                    <tr><td>Автономия</td><td>Высокая</td><td>Высокая</td></tr>
+                    <tr><td>Риск поглощения</td><td>Выше</td><td>Ниже (part-time)</td></tr>
+                    <tr><td>Соответствие энергетике</td><td>Требует внимания к границам</td><td>Более соответствует</td></tr>
+                </table>
+                <h3>Рекомендация</h3>
+                <p><strong>gconf</strong> — более безопасный старт. Part-time формат позволяет войти в роль без риска полного поглощения. Если опыт будет позитивным — это станет фундаментом для более интенсивных ролей.</p>
+                <p><strong>ELVA</strong> — более амбициозный вариант с большим потенциалом роста, но требует чёткой договорённости о границах на старте.</p>
+            </section>
+            <!-- DIRECTIONS -->
+            <section id="directions" class="section">
+                <h1 class="chapter-title">Карьерные направления</h1>
+                <p class="chapter-subtitle">Куда можно двигаться: три горизонта</p>
+                <h2>Горизонт 1: Ближайшие 6 месяцев</h2>
+                <p>Цель: войти в роль, которая даёт практику и доход без выгорания.</p>
+                <div class="trait-card"><h4>Рекомендуемая стратегия</h4><ul><li>Откликнуться на gconf — формат соответствует энергетике</li><li>Параллельно исследовать ELVA — понять культуру на интервью</li><li>Продолжать развивать AI-навыки через практику</li><li>Документировать свой вклад с первого дня</li></ul></div>
+                <h2>Горизонт 2: 6-18 месяцев</h2>
+                <p>Цель: накопить публичные кейсы и определить специализацию.</p>
+                <div class="expandable"><div class="expandable-header">Вариант A: Углубление в AI Operations</div><div class="expandable-content"><p>Стать специалистом по внедрению AI в операционные процессы компаний. Это растущий рынок: по данным McKinsey, 52% компаний ставят приоритет на создание AI-ready культуры.</p><p><strong>Шаги:</strong></p><ul><li>Собрать портфолио из 3-5 кейсов автоматизации</li><li>Получить сертификации (Anthropic, OpenAI)</li><li>Начать публично делиться опытом (LinkedIn, Telegram)</li></ul></div></div>
+                <div class="expandable"><div class="expandable-header">Вариант B: Creative Operations</div><div class="expandable-content"><p>Специализация на работе с творческими командами: студии, агентства, продюсерские компании. Там всегда хаос и всегда нужны люди, которые создают систему.</p><p><strong>Шаги:</strong></p><ul><li>Целенаправленно искать проекты в креативной индустрии</li><li>Изучить специфику: production workflows, creative briefs</li><li>Развивать сеть контактов в этой среде</li></ul></div></div>
+                <div class="expandable"><div class="expandable-header">Вариант C: EdTech / Learning Design</div><div class="expandable-content"><p>Вернуться к образовательным проектам на новом уровне: не как создатель курсов, а как архитектор образовательных систем с AI.</p><p><strong>Шаги:</strong></p><ul><li>Изучить современные подходы к Learning Experience Design</li><li>Исследовать применение AI в образовании</li><li>Связаться с EdTech-компаниями нового поколения</li></ul></div></div>
+                <h2>Горизонт 3: 2-5 лет</h2>
+                <p>Цель: выйти на уровень, где ты определяешь правила, а не следуешь им.</p>
+                <div class="insight-block"><p>Три возможных сценария:</p><ol style="margin-top: 1rem; font-style: normal;"><li><strong>Консультант/фрилансер</strong> — работа с несколькими клиентами, максимальная автономия</li><li><strong>Head of Operations</strong> — в компании, которая соответствует ценностям</li><li><strong>Собственный проект</strong> — обучение других строить системы</li></ol></div>
+                <h2>Направления, которые стоит исследовать</h2>
+                <p>На основе анализа твоего профиля и трендов рынка:</p>
+                <div class="resource-card"><div class="resource-icon">🎯</div><div class="resource-content"><h4>Agent Orchestrator</h4><p>Новая роль по McKinsey (2025): проектирование и управление AI-агентами в бизнес-процессах. Требует именно твоего сочетания — системное мышление + понимание AI + чувствительность к людям.</p></div></div>
+                <div class="resource-card"><div class="resource-icon">🌐</div><div class="resource-content"><h4>AI Transformation Partner</h4><p>Помощь компаниям в переходе на AI-first операционную модель. Это не про технологии — это про изменение процессов и культуры.</p></div></div>
+                <div class="resource-card"><div class="resource-icon">📚</div><div class="resource-content"><h4>Sense-Making Facilitator</h4><p>Помощь командам в ситуациях неопределённости: стратегические сессии, воркшопы, facilitation. Твоя способность «держать поле» — редкий навык.</p></div></div>
+            </section>
+
+            <!-- LEARNING -->
+            <section id="learning" class="section">
+                <h1 class="chapter-title">Что изучать</h1>
+                <p class="chapter-subtitle">Ресурсы для развития ключевых компетенций</p>
+                <h2>Приоритет 1: AI Operations</h2>
+                <div class="resource-card"><div class="resource-icon">📖</div><div class="resource-content"><h4>Anthropic Claude Documentation</h4><p>Официальная документация по работе с Claude API, промптам, агентам. Базовый ресурс для глубокого понимания инструмента.</p><p><a href="https://docs.anthropic.com" target="_blank">docs.anthropic.com</a></p></div></div>
+                <div class="resource-card"><div class="resource-icon">🎓</div><div class="resource-content"><h4>Building AI Agents (DeepLearning.AI)</h4><p>Практический курс по созданию AI-агентов. Не требует глубоких технических знаний.</p></div></div>
+                <div class="resource-card"><div class="resource-icon">📊</div><div class="resource-content"><h4>Make (Integromat) Academy</h4><p>No-code автоматизация. Позволяет строить сложные workflows без программирования.</p></div></div>
+                <h2>Приоритет 2: Operations & Systems</h2>
+                <div class="resource-card"><div class="resource-icon">📖</div><div class="resource-content"><h4>«The Fifth Discipline» — Peter Senge</h4><p>Классика системного мышления. Объясняет, как видеть и изменять системы. Научная база для твоего интуитивного подхода.</p></div></div>
+                <div class="resource-card"><div class="resource-icon">📖</div><div class="resource-content"><h4>«Traction» — Gino Wickman</h4><p>Практическая система для операционного управления. EOS (Entrepreneurial Operating System) — популярный framework в стартапах.</p></div></div>
+                <div class="resource-card"><div class="resource-icon">🎓</div><div class="resource-content"><h4>HBR: Why You Need Systems Thinking Now (2025)</h4><p>Свежая статья HBR о системном мышлении в бизнесе. Описывает 4-шаговый framework.</p></div></div>
+                <h2>Приоритет 3: Английский язык</h2>
+                <div class="resource-card"><div class="resource-icon">🗣️</div><div class="resource-content"><h4>Практика говорения</h4><p>Текущий уровень B2 достаточен для большинства ролей. Фокус: разговорная практика для уверенности на интервью и созвонах.</p><p><strong>Рекомендация:</strong> продолжать работу с репетитором + daily practice с AI (разговоры с Claude voice mode)</p></div></div>
+                <h2>Приоритет 4: Психологическая устойчивость</h2>
+                <div class="resource-card"><div class="resource-icon">📖</div><div class="resource-content"><h4>«The Impostor Cure» — Jessamy Hibberd</h4><p>Практическое руководство по работе с импостер-синдромом. Когнитивно-поведенческий подход.</p></div></div>
+                <div class="resource-card"><div class="resource-icon">📖</div><div class="resource-content"><h4>«Sensitive Striver» — Melody Wilding</h4><p>Специально для высокочувствительных людей с высокими амбициями. Стратегии работы с перфекционизмом и overthinking.</p></div></div>
+                <h2>Формат обучения</h2>
+                <p>Исходя из твоего когнитивного стиля:</p>
+                <ul>
+                    <li><strong>Короткие сессии</strong> — 30-60 минут глубокого погружения лучше, чем многочасовые марафоны</li>
+                    <li><strong>Практика сразу</strong> — применять изученное в тот же день</li>
+                    <li><strong>Документирование</strong> — записывать инсайты, создавать свою базу знаний</li>
+                    <li><strong>Одиночное обучение</strong> — групповые форматы могут перегружать</li>
+                </ul>
+            </section>
+
+            <!-- TOOLS -->
+            <section id="tools" class="section">
+                <h1 class="chapter-title">Инструменты</h1>
+                <p class="chapter-subtitle">Текущий стек и что добавить</p>
+                <h2>Текущий инструментарий</h2>
+                <div class="skill-grid">
+                    <div class="skill-card"><h4>AI-ассистенты</h4><p>Claude, ChatGPT, Perplexity — ежедневное использование для разных задач</p></div>
+                    <div class="skill-card"><h4>Разработка</h4><p>Cursor, Claude Code, GitHub — создание агентов и автоматизаций</p></div>
+                    <div class="skill-card"><h4>Продуктивность</h4><p>Notion, Jira, Confluence — управление проектами и базы знаний</p></div>
+                    <div class="skill-card"><h4>Дизайн</h4><p>Figma, Photoshop (с AI-генерацией) — базовые задачи</p></div>
+                    <div class="skill-card"><h4>Данные</h4><p>Excel — анализ и структурирование</p></div>
+                </div>
+                <h2>Что стоит добавить</h2>
+                <div class="resource-card"><div class="resource-icon">🔗</div><div class="resource-content"><h4>Make (Integromat)</h4><p>No-code платформа для автоматизации. Позволяет связывать разные сервисы и создавать сложные workflows без кода.</p><span class="resource-tag">Высокий приоритет</span></div></div>
+                <div class="resource-card"><div class="resource-icon">📊</div><div class="resource-content"><h4>Airtable</h4><p>Гибрид базы данных и spreadsheet. Популярен в стартапах для операционных задач.</p><span class="resource-tag">Средний приоритет</span></div></div>
+                <div class="resource-card"><div class="resource-icon">🤖</div><div class="resource-content"><h4>n8n или Zapier</h4><p>Альтернативы Make для автоматизации. n8n — self-hosted, больше контроля.</p><span class="resource-tag">Опционально</span></div></div>
+                <h2>Практические проекты для портфолио</h2>
+                <ol>
+                    <li><strong>AI-агент для классификации</strong> — уже сделано (4000 скриншотов). Оформить как кейс.</li>
+                    <li><strong>Система отслеживания откликов</strong> — уже сделано. Масштабировать и документировать.</li>
+                    <li><strong>Notion-система для нового клиента</strong> — создать шаблон, который можно показывать.</li>
+                    <li><strong>Автоматизация в Make</strong> — один показательный workflow.</li>
+                </ol>
+            </section>
+
+            <!-- CHECKLIST -->
+            <section id="checklist" class="section">
+                <h1 class="chapter-title">Чек-лист действий</h1>
+                <p class="chapter-subtitle">Конкретные шаги на ближайший месяц</p>
+                <h2>Неделя 1</h2>
+                <ul>
+                    <li>☐ Подготовить отклик на gconf — адаптировать резюме под роль</li>
+                    <li>☐ Изучить gconf глубже — пройти их материалы, понять культуру</li>
+                    <li>☐ Подготовить 3 вопроса для интервью (про границы, про фаундеров, про ожидания)</li>
+                </ul>
+                <h2>Неделя 2</h2>
+                <ul>
+                    <li>☐ Подготовить отклик на ELVA — другой акцент (операционка + AI)</li>
+                    <li>☐ Оформить кейс с AI-агентом — до/после, метрики, скриншоты</li>
+                    <li>☐ Начать Make Academy — первые 3 урока</li>
+                </ul>
+                <h2>Неделя 3</h2>
+                <ul>
+                    <li>☐ Провести интервью (если назначены)</li>
+                    <li>☐ Записать свои вопросы и ответы — для рефлексии</li>
+                    <li>☐ Продолжить Make — создать один реальный workflow</li>
+                </ul>
+                <h2>Неделя 4</h2>
+                <ul>
+                    <li>☐ Оценить результаты откликов</li>
+                    <li>☐ Если есть офферы — использовать эту книгу для анализа соответствия</li>
+                    <li>☐ Если нет — расширить поиск, использовать раздел «Роли» для новых направлений</li>
+                </ul>
+                <h2>Ежедневные практики</h2>
+                <ul>
+                    <li>☐ 10 минут английского (разговор с AI или repetitor)</li>
+                    <li>☐ Документировать один инсайт или достижение</li>
+                    <li>☐ Замечать моменты обесценивания — записывать, не верить</li>
+                </ul>
+                <h2>На случай отказов</h2>
+                <div class="insight-block">
+                    <p>Отказ — это информация, не приговор. Если не подошла роль — это несоответствие контекста, не твоя некомпетентность.</p>
+                    <p style="margin-top: 1rem; font-style: normal;"><strong>Вопросы для рефлексии:</strong></p>
+                    <ul style="margin-top: 0.5rem; font-style: normal;">
+                        <li>Что я узнала о себе из этого процесса?</li>
+                        <li>Какие сигналы я пропустила?</li>
+                        <li>Что я сделаю по-другому в следующий раз?</li>
+                    </ul>
+                </div>
+                <h2>Финальное напоминание</h2>
+                <div class="insight-block">
+                    <p>Ты — архитектор смыслов и процессов. Человек, который входит в хаос и создаёт порядок. Это редкая и ценная способность.</p>
+                    <p style="margin-top: 1rem; font-style: normal;">Твоя задача — не доказать, что ты достаточно хороша. Твоя задача — найти среду, которая достаточно хороша для тебя.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelector('[onclick="showSection(\'' + id + '\')"]').classList.add('active');
+            document.querySelector('.main').scrollTop = 0;
+            document.getElementById('sidebar').classList.remove('open');
+        }
+        document.querySelectorAll('.expandable-header').forEach(header => {
+            header.addEventListener('click', () => { header.parentElement.classList.toggle('open'); });
+        });
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.menu-toggle');
+            if (window.innerWidth <= 900 && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
+    <script>
+      const btn = document.getElementById('themeBtn');
+      function toggleTheme() {
+        const html = document.documentElement;
+        const isDark = html.getAttribute('data-theme') === 'dark';
+        html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        btn.textContent = isDark ? '🌙 Тёмная' : '☀️ Светлая';
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+      }
+      const saved = localStorage.getItem('theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+        btn.textContent = saved === 'dark' ? '☀️ Светлая' : '🌙 Тёмная';
+      }
+    </script>
+</body>
+</html>
