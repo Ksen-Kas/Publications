@@ -1,196 +1,460 @@
 <!DOCTYPE html>
 <html lang="ru" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex, nofollow">
-    <title>Professional Playbook — Ксения</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+Pro:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-    <style>
-        :root {
-          --bg: #ffffff;
-          --bg-secondary: #f8f9fa;
-          --bg-tertiary: #f1f3f5;
-          --text: #1a1a2e;
-          --text-secondary: #6c757d;
-          --border: #e9ecef;
-          --accent: #6c63ff;
-          --accent-hover: #5a52d5;
-          --accent-light: #eeecff;
-          --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-          --header-h: 56px;
-          --bg-primary: var(--bg);
-          --text-primary: var(--text);
-          --text-muted: var(--text-secondary);
-          --code-bg: var(--bg-tertiary);
-          --bg-sidebar: #2c2c2c;
-          --text-sidebar: #e8e6e3;
-        }
-        [data-theme="dark"] {
-          --bg: #0f1117;
-          --bg-secondary: #171b26;
-          --bg-tertiary: #1e2230;
-          --text: #e2e8f0;
-          --text-secondary: #8892a4;
-          --border: #2a2f3e;
-          --accent: #818cf8;
-          --accent-hover: #6366f1;
-          --accent-light: #1e1f3a;
-          --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
-          --bg-primary: var(--bg);
-          --text-primary: var(--text);
-          --text-muted: var(--text-secondary);
-          --code-bg: var(--bg-tertiary);
-          --bg-sidebar: var(--bg-secondary);
-          --text-sidebar: var(--text);
-        }
-        .theme-toggle {
-          display: flex; align-items: center; gap: 7px;
-          background: var(--bg-secondary);
-          border: 1px solid var(--border);
-          cursor: pointer;
-          padding: 6px 14px;
-          border-radius: 20px;
-          font-size: 13px;
-          color: var(--text);
-          transition: all 0.15s;
-          white-space: nowrap;
-          margin-top: 0.75rem;
-        }
-        .theme-toggle:hover {
-          background: var(--accent-light);
-          border-color: var(--accent);
-          color: var(--accent);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Source Sans Pro', sans-serif; font-size: 17px; line-height: 1.75; color: var(--text-primary); background: var(--bg-primary); }
-        .container { display: flex; min-height: 100vh; }
-        .sidebar { width: 280px; background: var(--bg-sidebar); color: var(--text-sidebar); padding: 2rem 0; position: fixed; height: 100vh; overflow-y: auto; z-index: 100; }
-        .sidebar-header { padding: 0 1.5rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.5rem; }
-        .sidebar-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; color: #fff; letter-spacing: 0.5px; }
-        .sidebar-header p { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 0.25rem; }
-        .nav-section { margin-bottom: 1.5rem; }
-        .nav-section-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.4); padding: 0 1.5rem; margin-bottom: 0.75rem; }
-        .nav-link { display: block; padding: 0.6rem 1.5rem; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.95rem; transition: all 0.2s ease; border-left: 3px solid transparent; }
-        .nav-link:hover { color: #fff; background: rgba(255,255,255,0.05); border-left-color: var(--accent-light); }
-        .nav-link.active { color: #fff; background: rgba(255,255,255,0.08); border-left-color: var(--accent-light); }
-        .main { flex: 1; margin-left: 280px; padding: 3rem 4rem; max-width: 900px; }
-        h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 500; color: var(--text-primary); }
-        .chapter-title { font-size: 2.5rem; margin-bottom: 0.5rem; line-height: 1.2; }
-        .chapter-subtitle { font-size: 1.1rem; color: var(--text-muted); font-style: italic; margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
-        h2 { font-size: 1.75rem; margin: 3rem 0 1.25rem; padding-top: 1rem; }
-        h3 { font-size: 1.35rem; margin: 2rem 0 1rem; color: var(--accent); }
-        h4 { font-size: 1.1rem; margin: 1.5rem 0 0.75rem; font-weight: 600; }
-        p { margin-bottom: 1.25rem; }
-        .section { display: none; animation: fadeIn 0.4s ease; }
-        .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .expandable { margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--bg-secondary); }
-        .expandable-header { padding: 1rem 1.25rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; transition: background 0.2s ease; }
-        .expandable-header:hover { background: rgba(0,0,0,0.02); }
-        .expandable-header::after { content: '+'; font-size: 1.25rem; color: var(--accent); transition: transform 0.3s ease; }
-        .expandable.open .expandable-header::after { content: '−'; }
-        .expandable-content { display: none; padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--border); }
-        .expandable.open .expandable-content { display: block; }
-        .insight-block { background: linear-gradient(135deg, var(--bg-secondary) 0%, #f8f6f2 100%); border-left: 4px solid var(--accent); padding: 1.5rem; margin: 2rem 0; border-radius: 0 8px 8px 0; }
-        .insight-block p { margin-bottom: 0; font-style: italic; color: var(--text-secondary); }
-        .insight-block .source { display: block; margin-top: 0.75rem; font-size: 0.85rem; font-style: normal; color: var(--text-muted); }
-        .research-block { background: #f8f7f5; border: 1px solid var(--border); padding: 1.25rem; margin: 1.5rem 0; border-radius: 8px; font-size: 0.95rem; }
-        .research-block-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 0.5rem; }
-        ul, ol { margin: 1rem 0 1.5rem 1.5rem; }
-        li { margin-bottom: 0.5rem; }
-        .schema { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 2rem 0; text-align: center; }
-        .schema svg { max-width: 100%; height: auto; }
-        .schema-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--text-secondary); margin-top: 1rem; }
-        .cycle-diagram { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin: 2rem 0; }
-        .cycle-step { background: var(--bg-secondary); border: 2px solid var(--border); border-radius: 50%; width: 120px; height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; transition: all 0.3s ease; }
-        .cycle-step:hover { border-color: var(--accent); transform: scale(1.05); }
-        .cycle-step .number { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; color: var(--accent); font-weight: 600; }
-        .cycle-step .label { font-size: 0.75rem; text-align: center; padding: 0 0.5rem; color: var(--text-secondary); }
-        .cycle-arrow { color: var(--accent-light); font-size: 1.5rem; align-self: center; }
-        .comparison-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem; }
-        .comparison-table th { background: var(--bg-secondary); padding: 1rem; text-align: left; font-weight: 600; border-bottom: 2px solid var(--border); }
-        .comparison-table td { padding: 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
-        .comparison-table tr:hover { background: rgba(139, 90, 43, 0.03); }
-        .fit-indicator { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
-        .fit-high { background: #e8f5e9; color: #2e7d32; }
-        .fit-medium { background: #fff3e0; color: #ef6c00; }
-        .fit-gap { background: #fce4ec; color: #c62828; }
-        .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
-        .skill-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: all 0.2s ease; }
-        .skill-card:hover { border-color: var(--accent-light); transform: translateY(-2px); }
-        .skill-card h4 { margin: 0 0 0.5rem; font-size: 1rem; }
-        .skill-card p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
-        .timeline { position: relative; padding-left: 2rem; margin: 2rem 0; }
-        .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--border); }
-        .timeline-item { position: relative; padding-bottom: 2rem; }
-        .timeline-item::before { content: ''; position: absolute; left: -2rem; top: 0.5rem; width: 12px; height: 12px; background: var(--accent); border-radius: 50%; transform: translateX(-5px); }
-        .timeline-item h4 { margin: 0 0 0.25rem; }
-        .timeline-item .period { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
-        .resource-card { display: flex; gap: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin: 1rem 0; align-items: flex-start; }
-        .resource-icon { width: 40px; height: 40px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.25rem; flex-shrink: 0; }
-        .resource-content h4 { margin: 0 0 0.25rem; font-size: 1rem; }
-        .resource-content p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
-        .resource-tag { display: inline-block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; background: var(--accent); color: #fff; padding: 0.15rem 0.5rem; border-radius: 3px; margin-top: 0.5rem; }
-        .trait-card { border-left: 4px solid var(--accent); background: var(--bg-secondary); padding: 1.25rem; margin: 1rem 0; border-radius: 0 8px 8px 0; }
-        .trait-card.shadow { border-left-color: #9e9e9e; }
-        .trait-card h4 { margin: 0 0 0.5rem; }
-        @media (max-width: 900px) {
-            .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
-            .sidebar.open { transform: translateX(0); }
-            .main { margin-left: 0; padding: 2rem 1.5rem; }
-            .menu-toggle { display: block; position: fixed; top: 1rem; left: 1rem; z-index: 101; background: var(--bg-sidebar); color: #fff; border: none; padding: 0.75rem 1rem; border-radius: 8px; cursor: pointer; }
-        }
-        @media (min-width: 901px) { .menu-toggle { display: none; } }
-        @media print { .sidebar { display: none; } .main { margin-left: 0; } .section { display: block !important; page-break-before: always; } }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Professional Playbook — Ксения</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --bg-tertiary: #f1f3f5;
+      --text: #1a1a2e;
+      --text-secondary: #6c757d;
+      --border: #e9ecef;
+      --accent: #6c63ff;
+      --accent-hover: #5a52d5;
+      --accent-light: #eeecff;
+      --pin-bg: #fffbeb;
+      --pin-border: #f59e0b;
+      --pin-text: #78350f;
+      --pin-title: #92400e;
+      --sidebar-width: 272px;
+      --header-h: 56px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    }
+    [data-theme="dark"] {
+      --bg: #0f1117;
+      --bg-secondary: #171b26;
+      --bg-tertiary: #1e2230;
+      --text: #e2e8f0;
+      --text-secondary: #8892a4;
+      --border: #2a2f3e;
+      --accent: #818cf8;
+      --accent-hover: #6366f1;
+      --accent-light: #1e1f3a;
+      --pin-bg: #1c1500;
+      --pin-border: #d97706;
+      --pin-text: #fde68a;
+      --pin-title: #fcd34d;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      transition: background 0.25s, color 0.25s;
+    }
+
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0; left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 200;
+      transition: transform 0.3s cubic-bezier(.4,0,.2,1), background 0.25s;
+      scrollbar-width: thin;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 18px 20px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-logo-icon {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, var(--accent), #e91e8c);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .sidebar-logo-text {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1.3;
+    }
+    .toc-nav { padding: 10px 0 20px; }
+    .toc-nav a {
+      display: block;
+      padding: 5px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      border-left: 2px solid transparent;
+      transition: all 0.15s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .toc-nav a:hover {
+      color: var(--text);
+      background: var(--accent-light);
+      border-left-color: var(--border);
+    }
+    .toc-nav a.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: var(--accent-light);
+      font-weight: 600;
+    }
+    .toc-part {
+      font-weight: 700 !important;
+      font-size: 12.5px !important;
+      color: var(--text) !important;
+      margin-top: 10px;
+      padding-top: 10px !important;
+      border-top: 1px solid var(--border);
+    }
+    .toc-part:first-child { border-top: none; margin-top: 0; }
+    .toc-sub { padding-left: 34px !important; font-size: 12px !important; }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 199;
+      backdrop-filter: blur(2px);
+    }
+    .sidebar-overlay.open { display: block; }
+
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      min-width: 0;
+    }
+    .site-header {
+      position: sticky; top: 0;
+      height: var(--header-h);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px 0 28px;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .menu-toggle {
+      display: none;
+      background: none; border: none;
+      cursor: pointer; color: var(--text);
+      font-size: 20px; padding: 4px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+    .menu-toggle:hover { background: var(--bg-tertiary); }
+    .header-title { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+    .theme-toggle {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--text);
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .theme-toggle:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .content {
+      padding: 52px 60px 80px;
+      max-width: 820px;
+    }
+    .hero {
+      margin-bottom: 64px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 12px; font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--accent) 0%, #e91e8c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-meta {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .hero-meta strong { color: var(--text); }
+
+    .section { margin-bottom: 72px; }
+    .part-header {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 28px;
+    }
+    .part-badge {
+      background: linear-gradient(135deg, var(--accent), #e91e8c);
+      color: white;
+      font-size: 11px; font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    h2 { font-size: 26px; font-weight: 700; color: var(--text); line-height: 1.25; }
+    .section-subtitle { color: var(--text-secondary); font-size: 15px; font-style: italic; margin: -16px 0 28px; }
+    h3 { font-size: 17.5px; font-weight: 650; color: var(--text); margin-top: 36px; margin-bottom: 12px; }
+    h4 { font-size: 15px; font-weight: 600; color: var(--text); margin: 0 0 8px; }
+    p { margin-bottom: 14px; }
+    ul, ol { padding-left: 22px; margin-bottom: 14px; }
+    li { margin-bottom: 5px; }
+    strong { font-weight: 600; }
+
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding: 10px 18px;
+      color: var(--text-secondary);
+      font-style: italic;
+      margin: 18px 0;
+      background: var(--accent-light);
+      border-radius: 0 8px 8px 0;
+    }
+    blockquote strong { color: var(--text); }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    th {
+      background: var(--bg-secondary);
+      font-weight: 600; font-size: 12px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 11px 16px;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+      color: var(--text-secondary);
+    }
+    td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--bg-secondary); }
+
+    .pin-block {
+      background: var(--pin-bg);
+      border-left: 4px solid var(--pin-border);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin: 22px 0;
+    }
+    .pin-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--pin-title);
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .pin-block p, .pin-block li { color: var(--pin-text); font-size: 14px; }
+    .pin-block strong { color: var(--pin-text); font-weight: 700; }
+
+    .insight-block {
+      border-left: 4px solid var(--accent);
+      padding: 16px 20px;
+      margin: 22px 0;
+      background: var(--accent-light);
+      border-radius: 0 10px 10px 0;
+    }
+    .insight-block p { margin-bottom: 8px; font-style: italic; color: var(--text-secondary); }
+    .insight-block .source { display: block; margin-top: 8px; font-size: 13px; font-style: normal; color: var(--text-secondary); }
+    .research-block {
+      background: var(--pin-bg);
+      border-left: 4px solid var(--pin-border);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin: 22px 0;
+      font-size: 14px;
+    }
+    .research-block-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--pin-title);
+      margin-bottom: 10px;
+    }
+    .research-block p, .research-block li { color: var(--pin-text); }
+
+    .expandable { margin: 18px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--bg-secondary); }
+    .expandable-header { padding: 12px 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; transition: background 0.2s; }
+    .expandable-header:hover { background: var(--bg-tertiary); }
+    .expandable-header::after { content: '+'; font-size: 1.2rem; color: var(--accent); }
+    .expandable.open .expandable-header::after { content: '−'; }
+    .expandable-content { display: none; padding: 0 18px 18px; border-top: 1px solid var(--border); }
+    .expandable.open .expandable-content { display: block; }
+
+    .schema { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin: 28px 0; text-align: center; box-shadow: var(--shadow); }
+    .schema svg { max-width: 100%; height: auto; }
+    .schema-title { font-size: 14px; color: var(--text-secondary); margin-top: 12px; }
+    .cycle-diagram { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 24px 0; align-items: center; }
+    .cycle-step { background: var(--bg-secondary); border: 2px solid var(--border); border-radius: 50%; width: 100px; height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.2s; }
+    .cycle-step:hover { border-color: var(--accent); }
+    .cycle-step .number { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+    .cycle-step .label { font-size: 12px; text-align: center; padding: 0 4px; color: var(--text-secondary); }
+    .cycle-arrow { color: var(--accent); font-size: 1.25rem; }
+    .trait-card { border-left: 4px solid var(--accent); background: var(--bg-secondary); padding: 16px 20px; margin: 16px 0; border-radius: 0 10px 10px 0; }
+    .trait-card.shadow { border-left-color: var(--text-secondary); }
+    .trait-card h4 { margin: 0 0 6px; }
+    .trait-card p { margin-bottom: 8px; font-size: 14px; color: var(--text-secondary); }
+    .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 20px 0; }
+    .skill-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 18px; transition: border-color 0.2s; }
+    .skill-card:hover { border-color: var(--accent); }
+    .skill-card h4 { margin: 0 0 8px; font-size: 14px; }
+    .skill-card p { font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5; }
+    .timeline { position: relative; padding-left: 24px; margin: 24px 0; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--border); }
+    .timeline-item { position: relative; padding-bottom: 24px; }
+    .timeline-item::before { content: ''; position: absolute; left: -24px; top: 6px; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; transform: translateX(-4px); }
+    .timeline-item h4 { margin: 0 0 4px; }
+    .timeline-item .period { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+    .timeline-item p { margin-bottom: 8px; font-size: 14px; }
+    .resource-card { display: flex; gap: 14px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin: 14px 0; align-items: flex-start; }
+    .resource-icon { width: 40px; height: 40px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .resource-content h4 { margin: 0 0 6px; font-size: 14px; }
+    .resource-content p { font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5; }
+    .resource-tag { display: inline-block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; background: var(--accent); color: #fff; padding: 3px 8px; border-radius: 4px; margin-top: 8px; font-weight: 600; }
+    .fit-indicator { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .fit-high { background: rgba(52,211,153,0.15); color: #059669; }
+    .fit-medium { background: rgba(251,146,60,0.15); color: #ea580c; }
+    .fit-gap { background: rgba(239,68,68,0.15); color: #dc2626; }
+
+    .site-footer {
+      margin-top: 40px;
+      padding: 28px 60px 40px;
+      border-top: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 13px;
+      max-width: 820px;
+    }
+
+    [id] { scroll-margin-top: calc(var(--header-h) + 16px); }
+
+    @media (max-width: 960px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .menu-toggle { display: flex; }
+      .content { padding: 36px 24px 60px; }
+      .site-footer { padding: 24px 24px 36px; }
+      h2 { font-size: 22px; }
+      .hero h1 { font-size: 30px; }
+    }
+    @media (max-width: 560px) {
+      .hero h1 { font-size: 24px; }
+      .content { padding: 24px 16px 48px; }
+      .site-header { padding: 0 16px; }
+      .theme-label { display: none; }
+      h3 { font-size: 16px; }
+    }
+  </style>
 </head>
 <body>
-    <button class="menu-toggle" onclick="toggleSidebar()">☰ Меню</button>
-    <div class="container">
-        <nav class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h1>Professional Playbook</h1>
-                <p>Ксения · 2026</p>
-                <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙 Тёмная</button>
-            </div>
-            <div class="nav-section">
-                <div class="nav-section-title">Введение</div>
-                <a href="#intro" class="nav-link active" onclick="showSection('intro')">Предисловие</a>
-            </div>
-            <div class="nav-section">
-                <div class="nav-section-title">Часть I. Кто я</div>
-                <a href="#psychotype" class="nav-link" onclick="showSection('psychotype')">Психотип и когнитивный стиль</a>
-                <a href="#pattern" class="nav-link" onclick="showSection('pattern')">Повторяющийся паттерн</a>
-                <a href="#strengths" class="nav-link" onclick="showSection('strengths')">Сильные стороны</a>
-                <a href="#shadows" class="nav-link" onclick="showSection('shadows')">Теневые зоны</a>
-            </div>
-            <div class="nav-section">
-                <div class="nav-section-title">Часть II. Мой путь</div>
-                <a href="#memoirs" class="nav-link" onclick="showSection('memoirs')">Ключевые этапы</a>
-                <a href="#lessons" class="nav-link" onclick="showSection('lessons')">Уроки и инсайты</a>
-            </div>
-            <div class="nav-section">
-                <div class="nav-section-title">Часть III. Куда я иду</div>
-                <a href="#formula" class="nav-link" onclick="showSection('formula')">Профессиональная формула</a>
-                <a href="#roles" class="nav-link" onclick="showSection('roles')">Подходящие роли</a>
-                <a href="#vacancies" class="nav-link" onclick="showSection('vacancies')">Анализ вакансий</a>
-                <a href="#directions" class="nav-link" onclick="showSection('directions')">Карьерные направления</a>
-            </div>
-            <div class="nav-section">
-                <div class="nav-section-title">Часть IV. Ресурсы</div>
-                <a href="#learning" class="nav-link" onclick="showSection('learning')">Что изучать</a>
-                <a href="#tools" class="nav-link" onclick="showSection('tools')">Инструменты</a>
-                <a href="#checklist" class="nav-link" onclick="showSection('checklist')">Чек-лист действий</a>
-            </div>
-        </nav>
-        <main class="main">
-            <!-- INTRO -->
-            <section id="intro" class="section active">
-                <h1 class="chapter-title">Предисловие</h1>
-                <p class="chapter-subtitle">Книга о человеке, который повышает разрешение реальности</p>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">📖</div>
+    <div class="sidebar-logo-text">Professional<br>Playbook</div>
+  </div>
+  <nav class="toc-nav">
+    <a href="#hero" class="toc-part">Введение</a>
+    <a href="#intro" class="toc-sub">Предисловие</a>
+    <a href="#psychotype" class="toc-part">Часть I. Кто я</a>
+    <a href="#psychotype" class="toc-sub">Психотип и когнитивный стиль</a>
+    <a href="#pattern" class="toc-sub">Повторяющийся паттерн</a>
+    <a href="#strengths" class="toc-sub">Сильные стороны</a>
+    <a href="#shadows" class="toc-sub">Теневые зоны</a>
+    <a href="#memoirs" class="toc-part">Часть II. Мой путь</a>
+    <a href="#memoirs" class="toc-sub">Ключевые этапы</a>
+    <a href="#lessons" class="toc-sub">Уроки и инсайты</a>
+    <a href="#formula" class="toc-part">Часть III. Куда я иду</a>
+    <a href="#formula" class="toc-sub">Профессиональная формула</a>
+    <a href="#roles" class="toc-sub">Подходящие роли</a>
+    <a href="#vacancies" class="toc-sub">Анализ вакансий</a>
+    <a href="#directions" class="toc-sub">Карьерные направления</a>
+    <a href="#learning" class="toc-part">Часть IV. Ресурсы</a>
+    <a href="#learning" class="toc-sub">Что изучать</a>
+    <a href="#tools" class="toc-sub">Инструменты</a>
+    <a href="#checklist" class="toc-sub">Чек-лист действий</a>
+  </nav>
+</aside>
+<div class="sidebar-overlay" id="overlay"></div>
+
+<div class="main">
+  <header class="site-header">
+    <div class="header-left">
+      <button class="menu-toggle" id="menuToggle" aria-label="Меню">☰</button>
+      <span class="header-title">Professional Playbook</span>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+      <span id="themeIcon">🌙</span>
+      <span class="theme-label" id="themeLabel">Тёмная</span>
+    </button>
+  </header>
+
+  <div class="content">
+
+    <section id="hero" class="hero">
+      <div class="hero-badge">Книга · 2026</div>
+      <h1>Professional Playbook</h1>
+      <div class="hero-meta">
+        Ксения · Исследование себя со стороны — психотип, сильные стороны, карьерная формула.
+      </div>
+    </section>
+
+    <section id="intro" class="section">
+      <div class="part-header">
+        <span class="part-badge">Введение</span>
+        <h2>Предисловие</h2>
+      </div>
+      <p class="section-subtitle">Книга о человеке, который повышает разрешение реальности</p>
                 <p>Эта книга — не резюме и не план развития в традиционном понимании. Это исследование: попытка увидеть себя так, как видит аналитик — со стороны, в динамике, с доказательствами.</p>
                 <p>Материалы, на которых основан этот документ, собирались более двух лет: консультации с карьерными психологами, записи голосовых сообщений, разборы психотипа, рабочие мемуары, анализ повторяющихся паттернов, гипотезы о поиске работы. Всё это было переработано, обезличено и дополнено научными источниками.</p>
                 <div class="insight-block">
@@ -205,10 +469,12 @@
                 <p>Используй боковую панель для навигации. Разворачиваемые блоки содержат дополнительную информацию — открывай их, когда нужна глубина.</p>
             </section>
 
-            <!-- PSYCHOTYPE -->
             <section id="psychotype" class="section">
-                <h1 class="chapter-title">Психотип и когнитивный стиль</h1>
-                <p class="chapter-subtitle">Глубинный тип мышления в мире скорости</p>
+                <div class="part-header">
+                    <span class="part-badge">Часть I</span>
+                    <h2>Психотип и когнитивный стиль</h2>
+                </div>
+                <p class="section-subtitle">Глубинный тип мышления в мире скорости</p>
                 <h2>Базовый профиль</h2>
                 <p>Ксения относится к категории людей с высокой сенсорной чувствительностью (Highly Sensitive Person, HSP) — это не диагноз и не слабость, а особенность нервной системы, которая влияет на способ обработки информации.</p>
                 <div class="research-block">
@@ -279,10 +545,9 @@
                 <p>Типичная последовательность: <strong>избегание → застывание → анализ → вина</strong></p>
                 <p>Это не трусость — это «freeze»-реакция, сформированная в ситуациях, где конфликт угрожал значимым отношениям. Ты не боишься конфликта как такового. Ты боишься потери связи.</p>
             </section>
-            <!-- PATTERN -->
             <section id="pattern" class="section">
-                <h1 class="chapter-title">Повторяющийся паттерн</h1>
-                <p class="chapter-subtitle">Цикл, который проявляется в каждом проекте</p>
+                <h2>Повторяющийся паттерн</h2>
+                <p class="section-subtitle">Цикл, который проявляется в каждом проекте</p>
                 <p>Анализ четырёх основных этапов карьеры выявил устойчивый цикл из шести шагов. Этот паттерн повторяется независимо от отрасли, размера компании и должности.</p>
                 <div class="cycle-diagram">
                     <div class="cycle-step"><span class="number">1</span><span class="label">Вход в хаос</span></div>
@@ -359,10 +624,9 @@
                 </ul>
             </section>
 
-            <!-- STRENGTHS -->
             <section id="strengths" class="section">
-                <h1 class="chapter-title">Сильные стороны</h1>
-                <p class="chapter-subtitle">Способности, которые создают уникальную ценность</p>
+                <h2>Сильные стороны</h2>
+                <p class="section-subtitle">Способности, которые создают уникальную ценность</p>
                 <p>Эти силы проявляются во всех рабочих контекстах — от корпорации до арт-проекта. Они формируют твою профессиональную ДНК.</p>
                 <h2>Ядро компетенций</h2>
                 <div class="skill-grid">
@@ -406,10 +670,9 @@
                     <p>Твой набор навыков — системное мышление + AI-архитектура + человеческая чувствительность — точно соответствует этим новым ролям.</p>
                 </div>
             </section>
-            <!-- SHADOWS -->
             <section id="shadows" class="section">
-                <h1 class="chapter-title">Теневые зоны</h1>
-                <p class="chapter-subtitle">Паттерны, которые мешают, но которые можно трансформировать</p>
+                <h2>Теневые зоны</h2>
+                <p class="section-subtitle">Паттерны, которые мешают, но которые можно трансформировать</p>
                 <p>Эти паттерны — не недостатки характера. Это защитные механизмы, сформированные в прошлом опыте. Они включаются автоматически, но их можно замечать и управлять ими.</p>
                 <h2>Шесть теневых паттернов</h2>
                 <div class="trait-card shadow"><h4>Тень №1: «Я должна быть лучшей, иначе меня не заметят»</h4><p>Самая сильная тень. Появляется, когда рядом кто-то делает быстрее, громче, увереннее. Включает сравнение, ощущение угрозы, мысль «меня заменят».</p><p><strong>Триггер:</strong> появление нового человека в команде, чей-то быстрый результат.</p><p><strong>Антидот:</strong> напоминание, что твоя ценность — в глубине, а не в скорости. Разные роли, не конкуренция.</p></div>
@@ -441,10 +704,12 @@
                 <p><strong>Почему работает:</strong> создаёт новый нейронный контур — «я могу действовать без идеальности, и это безопасно». Тебе не нужна смелость. Тебе нужна нормализация несовершенства.</p>
             </section>
 
-            <!-- MEMOIRS -->
             <section id="memoirs" class="section">
-                <h1 class="chapter-title">Ключевые этапы</h1>
-                <p class="chapter-subtitle">Траектория, которая привела сюда</p>
+                <div class="part-header">
+                    <span class="part-badge">Часть II</span>
+                    <h2>Ключевые этапы</h2>
+                </div>
+                <p class="section-subtitle">Траектория, которая привела сюда</p>
                 <div class="timeline">
                     <div class="timeline-item"><h4>Фармацевтическая дистрибуция</h4><div class="period">2013-2016</div><p>Начало карьеры в корпоративной среде. Первый опыт построения систем: создание работающих процессов там, где их не было. Столкновение с корпоративной политикой и понимание, что формальная иерархия ≠ реальное влияние.</p></div>
                     <div class="timeline-item"><h4>Онлайн-ритейл: масштаб и хаос</h4><div class="period">2017-2021</div><p>Создание LMS-системы с нуля. Управление командой из 5 человек. Интеграция HR и IT. Первый опыт быть «мостом» между разными мирами. Здесь же — первое глубокое выгорание после того, как система заработала.</p><p><em>Ключевой инсайт: когда хаос закончился, работа потеряла смысл.</em></p></div>
@@ -461,10 +726,9 @@
                 </ul>
             </section>
 
-            <!-- LESSONS -->
             <section id="lessons" class="section">
-                <h1 class="chapter-title">Уроки и инсайты</h1>
-                <p class="chapter-subtitle">Что стало понятно с течением времени</p>
+                <h2>Уроки и инсайты</h2>
+                <p class="section-subtitle">Что стало понятно с течением времени</p>
                 <h2>Уроки из опыта</h2>
                 <div class="expandable open">
                     <div class="expandable-header">О природе своей работы</div>
@@ -501,18 +765,20 @@
                 </div>
                 <h2>О страхе перед вакансиями</h2>
                 <p>Анализ реакций на целевые вакансии показал характерный паттерн:</p>
-                <table class="comparison-table">
+                <div class="table-wrap"><table class="comparison-table">
                     <tr><th>Страх</th><th>Реальность</th></tr>
                     <tr><td>«Я недостаточно погружена в AI»</td><td>Ты работаешь с AI ежедневно, построила агентов, автоматизации. Вакансии ищут операционных менеджеров, не ML-инженеров.</td></tr>
                     <tr><td>«Настоящие специалисты знают архитектуру систем»</td><td>Целевые роли — не про системную архитектуру. Они про использование AI как инструмента в операционных процессах.</td></tr>
                     <tr><td>«Работа поглотит всё время»</td><td>Это реальный риск. Но он зависит от выбора среды и договорённостей на старте, а не от роли как таковой.</td></tr>
                     <tr><td>«Я не справлюсь»</td><td>Ты справлялась с более сложными ситуациями: LMS с нуля, команда 5 человек, интеграция HR-IT. Это сложнее, чем настройка чек-листов.</td></tr>
-                </table>
+                </table></div>
             </section>
-            <!-- FORMULA -->
             <section id="formula" class="section">
-                <h1 class="chapter-title">Профессиональная формула</h1>
-                <p class="chapter-subtitle">Кто ты как специалист — точное определение</p>
+                <div class="part-header">
+                    <span class="part-badge">Часть III</span>
+                    <h2>Профессиональная формула</h2>
+                </div>
+                <p class="section-subtitle">Кто ты как специалист — точное определение</p>
                 <h2>Ядро</h2>
                 <div class="insight-block">
                     <p><strong>Ты — Архитектор смыслов и процессов. Мягкий лидер стратегической глубины.</strong></p>
@@ -560,10 +826,9 @@
                 </div>
             </section>
 
-            <!-- ROLES -->
             <section id="roles" class="section">
-                <h1 class="chapter-title">Подходящие роли</h1>
-                <p class="chapter-subtitle">Позиции, которые соответствуют твоему профилю</p>
+                <h2>Подходящие роли</h2>
+                <p class="section-subtitle">Позиции, которые соответствуют твоему профилю</p>
                 <h2>Естественные роли</h2>
                 <div class="resource-card"><div class="resource-icon">🏗️</div><div class="resource-content"><h4>AI-Enabled Content Strategist</h4><p>Проектирование контент-систем с интеграцией AI: от стратегии до workflow. Создание рамок, в которых AI и люди работают вместе.</p><span class="resource-tag">Высокий fit</span></div></div>
                 <div class="resource-card"><div class="resource-icon">⚙️</div><div class="resource-content"><h4>Creative Operations Lead</h4><p>Операционное управление творческими командами: процессы, ритмы, инструменты. Превращение хаоса в повторяемую систему.</p><span class="resource-tag">Высокий fit</span></div></div>
@@ -571,13 +836,13 @@
                 <div class="resource-card"><div class="resource-icon">🤖</div><div class="resource-content"><h4>AI Workflow Designer</h4><p>Проектирование процессов, где AI выполняет рутину, а люди фокусируются на решениях. Новая роль, появившаяся в 2024-2025.</p><span class="resource-tag">Высокий fit</span></div></div>
                 <div class="resource-card"><div class="resource-icon">👥</div><div class="resource-content"><h4>Chief of Staff (Creative/Tech teams)</h4><p>Правая рука основателя или руководителя: операционка, координация, стратегическая поддержка. Требует высокого доверия.</p><span class="resource-tag">Средний fit</span></div></div>
                 <h2>Контексты, где ты востребована</h2>
-                <table class="comparison-table">
+                <div class="table-wrap"><table class="comparison-table">
                     <tr><th>Контекст</th><th>Почему подходит</th><th>На что обратить внимание</th></tr>
                     <tr><td><strong>Стартапы на этапе роста</strong></td><td>Хаос есть, но уже понятно направление. Нужен человек, который превратит это в систему.</td><td>Проверь, есть ли ясность у основателей. Если её нет — будет тяжело.</td></tr>
                     <tr><td><strong>EdTech / образовательные проекты</strong></td><td>Сочетание смысла, системы и работы с людьми. Естественная среда для твоего типа.</td><td>Убедись, что ценят качество, а не только метрики.</td></tr>
                     <tr><td><strong>AI-компании нового типа</strong></td><td>Нужны люди, которые понимают и технологию, и людей. Это редкость.</td><td>Оцени команду: не все AI-компании здоровы.</td></tr>
                     <tr><td><strong>Творческие студии и агентства</strong></td><td>Хаос как норма. Нужен человек, который держит систему.</td><td>Проверь, готовы ли платить за «невидимую» работу.</td></tr>
-                </table>
+                </table></div>
                 <h2>Роли, которых стоит избегать</h2>
                 <ul>
                     <li><strong>Чистый исполнитель</strong> — нет влияния на систему, только задачи</li>
@@ -587,10 +852,9 @@
                 </ul>
             </section>
 
-            <!-- VACANCIES -->
             <section id="vacancies" class="section">
-                <h1 class="chapter-title">Анализ вакансий</h1>
-                <p class="chapter-subtitle">Разбор целевых позиций: ELVA и gconf</p>
+                <h2>Анализ вакансий</h2>
+                <p class="section-subtitle">Разбор целевых позиций: ELVA и gconf</p>
                 <h2>ELVA: Operations Manager</h2>
                 <div class="expandable open"><div class="expandable-header">О компании</div><div class="expandable-content"><p>ELVA — мобильное приложение с подпиской на эксклюзивный видеоконтент и AI-инструменты для его создания. Компания строит себя как продукт: убирает рутину, автоматизирует всё возможное, освобождает время людей для мышления и роста.</p></div></div>
                 <h3>Что они ищут</h3>
@@ -601,21 +865,21 @@
                     <li>Комфортно в стартапе без готовых инструкций</li>
                 </ul>
                 <h3>Анализ соответствия</h3>
-                <table class="comparison-table">
+                <div class="table-wrap"><table class="comparison-table">
                     <tr><th>Требование</th><th>Твой профиль</th><th>Fit</th></tr>
                     <tr><td>Системное мышление</td><td>Ядро твоего профиля — видеть систему целиком</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
                     <tr><td>AI как основной инструмент</td><td>Ежедневная работа с Claude, ChatGPT, Cursor; построение агентов</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
                     <tr><td>Порядок в хаосе</td><td>Это буквально твой паттерн — входить в хаос и создавать структуру</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
                     <tr><td>No-code / low-code / automation</td><td>Notion, Make, базовая работа с API через AI-ассистентов</td><td><span class="fit-indicator fit-medium">○ Средний</span></td></tr>
                     <tr><td>Координация с finance, legal, HR</td><td>Опыт HR-IT интеграции в корпорации</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
-                </table>
+                </table></div>
                 <div class="insight-block"><p><strong>Вердикт:</strong> Высокое соответствие. Основной риск — не недостаток навыков, а потенциальное поглощение работой. Важно на старте договориться о границах.</p></div>
                 <h2>gconf: Community & Operations Manager</h2>
                 <div class="expandable open"><div class="expandable-header">О компании</div><div class="expandable-content"><p>gconf делает интенсивы про новые отношения человека с AI — не как с инструментом, а как с партнёром. 3000+ выпускников, когорты каждые два месяца, два продукта (мета-навыки и вайбкодинг). Founder-led проект с фокусом на качество опыта и комьюнити.</p></div></div>
                 <h3>Роль</h3>
                 <p>Превратить поток идей в работающую систему. Фаундеры — смысл и продукт. Ты — процессы и развитие.</p>
                 <h3>Анализ соответствия</h3>
-                <table class="comparison-table">
+                <div class="table-wrap"><table class="comparison-table">
                     <tr><th>Требование</th><th>Твой профиль</th><th>Fit</th></tr>
                     <tr><td>AI-first мышление</td><td>Работа с Claude, Cursor, ChatGPT, агенты</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
                     <tr><td>Cursor, Claude Code, agentic workflows</td><td>Практический опыт с Cursor и Claude Code</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
@@ -623,10 +887,10 @@
                     <tr><td>Работа с комьюнити</td><td>Меньше прямого опыта, но есть понимание динамики групп</td><td><span class="fit-indicator fit-medium">○ Средний</span></td></tr>
                     <tr><td>Part-time (20ч/нед)</td><td>Соответствует твоему оптимальному формату</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
                     <tr><td>Автономная работа при недоступности фаундеров</td><td>Сильная сторона — при ясных границах</td><td><span class="fit-indicator fit-high">✓ Высокий</span></td></tr>
-                </table>
+                </table></div>
                 <div class="insight-block"><p><strong>Вердикт:</strong> Высокое соответствие. Формат (part-time, remote, async) идеален. Риск: founder-led проект может означать частую смену направления. Важно понять, насколько фаундеры сами ясны в том, чего хотят.</p></div>
                 <h2>Сравнение вакансий</h2>
-                <table class="comparison-table">
+                <div class="table-wrap"><table class="comparison-table">
                     <tr><th>Критерий</th><th>ELVA</th><th>gconf</th></tr>
                     <tr><td>Формат</td><td>Предположительно full-time</td><td>Part-time 20ч/нед</td></tr>
                     <tr><td>Уровень хаоса</td><td>Высокий (стартап, нет инструкций)</td><td>Средний (устойчивый проект)</td></tr>
@@ -634,15 +898,14 @@
                     <tr><td>Автономия</td><td>Высокая</td><td>Высокая</td></tr>
                     <tr><td>Риск поглощения</td><td>Выше</td><td>Ниже (part-time)</td></tr>
                     <tr><td>Соответствие энергетике</td><td>Требует внимания к границам</td><td>Более соответствует</td></tr>
-                </table>
+                </table></div>
                 <h3>Рекомендация</h3>
                 <p><strong>gconf</strong> — более безопасный старт. Part-time формат позволяет войти в роль без риска полного поглощения. Если опыт будет позитивным — это станет фундаментом для более интенсивных ролей.</p>
                 <p><strong>ELVA</strong> — более амбициозный вариант с большим потенциалом роста, но требует чёткой договорённости о границах на старте.</p>
             </section>
-            <!-- DIRECTIONS -->
             <section id="directions" class="section">
-                <h1 class="chapter-title">Карьерные направления</h1>
-                <p class="chapter-subtitle">Куда можно двигаться: три горизонта</p>
+                <h2>Карьерные направления</h2>
+                <p class="section-subtitle">Куда можно двигаться: три горизонта</p>
                 <h2>Горизонт 1: Ближайшие 6 месяцев</h2>
                 <p>Цель: войти в роль, которая даёт практику и доход без выгорания.</p>
                 <div class="trait-card"><h4>Рекомендуемая стратегия</h4><ul><li>Откликнуться на gconf — формат соответствует энергетике</li><li>Параллельно исследовать ELVA — понять культуру на интервью</li><li>Продолжать развивать AI-навыки через практику</li><li>Документировать свой вклад с первого дня</li></ul></div>
@@ -661,10 +924,12 @@
                 <div class="resource-card"><div class="resource-icon">📚</div><div class="resource-content"><h4>Sense-Making Facilitator</h4><p>Помощь командам в ситуациях неопределённости: стратегические сессии, воркшопы, facilitation. Твоя способность «держать поле» — редкий навык.</p></div></div>
             </section>
 
-            <!-- LEARNING -->
             <section id="learning" class="section">
-                <h1 class="chapter-title">Что изучать</h1>
-                <p class="chapter-subtitle">Ресурсы для развития ключевых компетенций</p>
+                <div class="part-header">
+                    <span class="part-badge">Часть IV</span>
+                    <h2>Что изучать</h2>
+                </div>
+                <p class="section-subtitle">Ресурсы для развития ключевых компетенций</p>
                 <h2>Приоритет 1: AI Operations</h2>
                 <div class="resource-card"><div class="resource-icon">📖</div><div class="resource-content"><h4>Anthropic Claude Documentation</h4><p>Официальная документация по работе с Claude API, промптам, агентам. Базовый ресурс для глубокого понимания инструмента.</p><p><a href="https://docs.anthropic.com" target="_blank">docs.anthropic.com</a></p></div></div>
                 <div class="resource-card"><div class="resource-icon">🎓</div><div class="resource-content"><h4>Building AI Agents (DeepLearning.AI)</h4><p>Практический курс по созданию AI-агентов. Не требует глубоких технических знаний.</p></div></div>
@@ -688,10 +953,9 @@
                 </ul>
             </section>
 
-            <!-- TOOLS -->
             <section id="tools" class="section">
-                <h1 class="chapter-title">Инструменты</h1>
-                <p class="chapter-subtitle">Текущий стек и что добавить</p>
+                <h2>Инструменты</h2>
+                <p class="section-subtitle">Текущий стек и что добавить</p>
                 <h2>Текущий инструментарий</h2>
                 <div class="skill-grid">
                     <div class="skill-card"><h4>AI-ассистенты</h4><p>Claude, ChatGPT, Perplexity — ежедневное использование для разных задач</p></div>
@@ -713,10 +977,9 @@
                 </ol>
             </section>
 
-            <!-- CHECKLIST -->
             <section id="checklist" class="section">
-                <h1 class="chapter-title">Чек-лист действий</h1>
-                <p class="chapter-subtitle">Конкретные шаги на ближайший месяц</p>
+                <h2>Чек-лист действий</h2>
+                <p class="section-subtitle">Конкретные шаги на ближайший месяц</p>
                 <h2>Неделя 1</h2>
                 <ul>
                     <li>☐ Подготовить отклик на gconf — адаптировать резюме под роль</li>
@@ -763,43 +1026,99 @@
                     <p style="margin-top: 1rem; font-style: normal;">Твоя задача — не доказать, что ты достаточно хороша. Твоя задача — найти среду, которая достаточно хороша для тебя.</p>
                 </div>
             </section>
-        </main>
-    </div>
-    <script>
-        function showSection(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            document.querySelector('[onclick="showSection(\'' + id + '\')"]').classList.add('active');
-            document.querySelector('.main').scrollTop = 0;
-            document.getElementById('sidebar').classList.remove('open');
+
+  </div>
+
+  <footer class="site-footer">
+    Professional Playbook · Ксения · 2026
+  </footer>
+
+</div>
+
+<script>
+  const html = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  const themeLabel = document.getElementById('themeLabel');
+
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  html.setAttribute('data-theme', savedTheme);
+  updateThemeBtn(savedTheme);
+
+  themeToggle.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateThemeBtn(next);
+  });
+
+  function updateThemeBtn(theme) {
+    if (theme === 'dark') {
+      themeIcon.textContent = '☀️';
+      themeLabel.textContent = 'Светлая';
+    } else {
+      themeIcon.textContent = '🌙';
+      themeLabel.textContent = 'Тёмная';
+    }
+  }
+
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  const menuToggle = document.getElementById('menuToggle');
+
+  menuToggle.addEventListener('click', () => {
+    sidebar.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+
+  document.querySelectorAll('.toc-nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 960) {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+
+  const tocLinks = document.querySelectorAll('.toc-nav a');
+  const sections = [];
+  tocLinks.forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      const el = document.getElementById(href.slice(1));
+      if (el) sections.push({ el, link });
+    }
+  });
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          tocLinks.forEach(l => l.classList.remove('active'));
+          const activeLink = document.querySelector(`.toc-nav a[href="#${id}"]`);
+          if (activeLink) {
+            activeLink.classList.add('active');
+            activeLink.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+          }
         }
-        document.querySelectorAll('.expandable-header').forEach(header => {
-            header.addEventListener('click', () => { header.parentElement.classList.toggle('open'); });
-        });
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
-        document.addEventListener('click', (e) => {
-            const sidebar = document.getElementById('sidebar');
-            const toggle = document.querySelector('.menu-toggle');
-            if (window.innerWidth <= 900 && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
-                sidebar.classList.remove('open');
-            }
-        });
-    </script>
-    <script>
-      const btn = document.getElementById('themeBtn');
-      function toggleTheme() {
-        const html = document.documentElement;
-        const isDark = html.getAttribute('data-theme') === 'dark';
-        html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-        btn.textContent = isDark ? '🌙 Тёмная' : '☀️ Светлая';
-        localStorage.setItem('theme', isDark ? 'light' : 'dark');
-      }
-      const saved = localStorage.getItem('theme');
-      if (saved) {
-        document.documentElement.setAttribute('data-theme', saved);
-        btn.textContent = saved === 'dark' ? '☀️ Светлая' : '🌙 Тёмная';
-      }
-    </script>
+      });
+    },
+    { rootMargin: '-56px 0px -60% 0px', threshold: 0 }
+  );
+  sections.forEach(({ el }) => observer.observe(el));
+
+  document.querySelectorAll('.expandable-header').forEach(header => {
+    header.addEventListener('click', () => { header.parentElement.classList.toggle('open'); });
+  });
+</script>
 </body>
 </html>
