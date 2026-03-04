@@ -123,7 +123,7 @@
             position: absolute;
             left: 129px; /* align with step-circle center: margin-left 100px + half of 60px - 1px */
             top: 30px;   /* center of first circle (60px / 2) */
-            bottom: 90px; /* end before last circle bottom: 60px margin + 30px half circle */
+            bottom: 120px; /* end at top of 7th circle: 60px step margin + 60px circle height */
             width: 2px;
             background: linear-gradient(to bottom, #2563eb 0%, #7c3aed 50%, #dc2626 100%);
             z-index: 0;
@@ -356,7 +356,7 @@
             .pipeline::before {
                 left: -1px; /* circle center when circle is absolute left -30px, width 60 */
                 top: 30px;
-                bottom: 90px;
+                bottom: 120px;
             }
         }
 
@@ -398,13 +398,13 @@
                 <div class="intro-block">
                     <div class="intro-block-title">📊 Метод</div>
                     <div class="intro-block-content">
-                        <strong>Факты первичны</strong> Начинаем с анализа реального рынка (вакансии, требования, тренды), а не ощущений. Используем AI для анализа данных, но все решения — твои.
+                        <strong>Анализируем</strong>
                     </div>
                 </div>
                 <div class="intro-block">
                     <div class="intro-block-title">✅ Честность</div>
                     <div class="intro-block-content">
-                        <strong>Никакого выдумывания. Факты первичны</strong> Все в CV, LinkedIn и письмах основано на твоих реальных фактах. Если чего-то нет — не додумываем, спрашиваем.
+                        <strong>Факты первичны</strong>
                     </div>
                 </div>
                 <div class="intro-block">
