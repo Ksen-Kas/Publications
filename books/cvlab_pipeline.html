@@ -1,669 +1,751 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOE — Стратегический поиск работы</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV-LAB — Как я работаю</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #111111;
+    --white: #ffffff;
+    --gray-light: #f4f4f2;
+    --gray-mid: #e8e8e5;
+    --gray-text: #6b6b67;
+    --accent-green: #c8f060;
+    --accent-blue: #d0e8ff;
+    --accent-peach: #ffd9c8;
+    --accent-yellow: #fff0a8;
+    --accent-lilac: #e8d8ff;
+    --border: #e0e0dc;
+  }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
-            padding: 60px 20px;
-            min-height: 100vh;
-        }
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+  html {
+    scroll-behavior: smooth;
+  }
 
-        .header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
+  body {
+    font-family: 'Golos Text', system-ui, sans-serif;
+    background: var(--white);
+    color: var(--black);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
 
-        .header h1 {
-            font-size: 48px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
-        }
+  /* ── HEADER ── */
+  .site-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    z-index: 100;
+  }
 
-        .header p {
-            font-size: 18px;
-            color: #666;
-            font-weight: 400;
-        }
+  .logo {
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    text-decoration: none;
+  }
 
-        /* Intro Section */
-        .intro {
-            background: white;
-            border-radius: 12px;
-            padding: 48px;
-            margin-bottom: 80px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border-left: 6px solid #2563eb;
-        }
+  .logo span {
+    display: inline-block;
+    background: var(--accent-green);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 0;
+  }
 
-        .intro h2 {
-            font-size: 26px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 28px;
-        }
+  /* ── HERO ── */
+  .hero {
+    padding: 64px 24px 56px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
 
-        .intro-blocks {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 32px;
-        }
+  .hero-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-text);
+    margin-bottom: 20px;
+  }
 
-        .intro-block {
-            display: flex;
-            flex-direction: column;
-        }
+  .hero h1 {
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
 
-        .intro-block-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #2563eb;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+  .hero h1 em {
+    font-style: normal;
+    background: var(--accent-green);
+    padding: 0 6px;
+    border-radius: 4px;
+  }
 
-        .intro-block-content {
-            font-size: 15px;
-            color: #555;
-            line-height: 1.7;
-        }
+  .hero-lead {
+    font-size: 17px;
+    color: #444;
+    max-width: 540px;
+    line-height: 1.65;
+  }
 
-        .intro-block-content strong {
-            color: #1a1a1a;
-            display: block;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
+  /* ── METHOD STRIP ── */
+  .method-strip {
+    background: var(--gray-light);
+    padding: 32px 24px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
 
-        .intro-block-content ul {
-            margin: 0;
-            padding-left: 20px;
-        }
+  .method-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
 
-        .intro-block-content li {
-            margin-bottom: 8px;
-        }
+  .method-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
 
-        @media (max-width: 1024px) {
-            .intro-blocks {
-                grid-template-columns: 1fr;
-                gap: 24px;
-            }
-        }
+  .method-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-        /* Pipeline Container */
-        .pipeline {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            position: relative;
-            margin-bottom: 80px;
-        }
+  .method-item h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
 
-        /* Connecting Line - through circle centers, from 1 to 7 only */
-        .pipeline::before {
-            content: '';
-            position: absolute;
-            left: 129px; /* align with step-circle center: margin-left 100px + half of 60px - 1px */
-            top: 30px;   /* center of first circle (60px / 2) */
-            bottom: 180px; /* end well above 7th circle so line doesn't cut through it */
-            width: 2px;
-            background: linear-gradient(to bottom, #2563eb 0%, #7c3aed 50%, #dc2626 100%);
-            z-index: 0;
-        }
+  .method-item p {
+    font-size: 13px;
+    color: var(--gray-text);
+    line-height: 1.5;
+  }
 
-        /* Individual Steps - ALL RIGHT */
-        .step {
-            display: flex;
-            margin-bottom: 60px;
-            position: relative;
-            z-index: 1;
-            animation: fadeIn 0.8s ease-out forwards;
-            opacity: 0;
-            flex-direction: row;
-            margin-left: 100px;
-        }
+  /* ── SECTION TITLE ── */
+  .section-label {
+    max-width: 760px;
+    margin: 56px auto 32px;
+    padding: 0 24px;
+  }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+  .section-label h2 {
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    margin-bottom: 10px;
+  }
 
-        .step:nth-child(1) { animation-delay: 0.1s; }
-        .step:nth-child(2) { animation-delay: 0.2s; }
-        .step:nth-child(3) { animation-delay: 0.3s; }
-        .step:nth-child(4) { animation-delay: 0.4s; }
-        .step:nth-child(5) { animation-delay: 0.5s; }
-        .step:nth-child(6) { animation-delay: 0.6s; }
-        .step:nth-child(7) { animation-delay: 0.7s; }
+  .section-label p {
+    font-size: 15px;
+    color: var(--gray-text);
+  }
 
-        .step-content {
-            flex: 1;
-            max-width: 900px;
-            padding: 32px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border-left: 4px solid;
-            transition: all 0.3s ease;
-        }
+  /* ── LOGIC BLOCK ── */
+  .logic-block {
+    max-width: 760px;
+    margin: 0 auto 56px;
+    padding: 0 24px;
+  }
 
-        .step-content:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            transform: translateY(-4px);
-        }
+  .logic-chain {
+    background: var(--gray-light);
+    border-radius: 16px;
+    padding: 28px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
 
-        /* Step Colors */
-        .step:nth-child(1) .step-content {
-            border-left-color: #3b82f6;
-        }
+  .logic-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    position: relative;
+    padding-bottom: 20px;
+  }
 
-        .step:nth-child(2) .step-content {
-            border-left-color: #8b5cf6;
-        }
+  .logic-step:last-child {
+    padding-bottom: 0;
+  }
 
-        .step:nth-child(3) .step-content {
-            border-left-color: #06b6d4;
-        }
+  .logic-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 30px;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
 
-        .step:nth-child(4) .step-content {
-            border-left-color: #f59e0b;
-        }
+  .logic-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
 
-        .step:nth-child(5) .step-content {
-            border-left-color: #ec4899;
-        }
+  .logic-text strong {
+    font-size: 15px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+  }
 
-        .step:nth-child(6) .step-content {
-            border-left-color: #dc2626;
-        }
+  .logic-text span {
+    font-size: 13px;
+    color: var(--gray-text);
+  }
 
-        .step:nth-child(7) .step-content {
-            border-left-color: #10b981;
-        }
+  /* ── STAGES ── */
+  .stages {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
 
-        /* Center Circle - SMALL, LEFT SIDE */
-        .step-circle {
-            width: 60px;
-            height: 60px;
-            margin-right: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: white;
-            border-radius: 50%;
-            border: 4px solid;
-            z-index: 2;
-            position: relative;
-            flex-shrink: 0;
-        }
+  .stage {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 20px;
+    align-items: start;
+    transition: background 0.2s;
+  }
 
-        .step:nth-child(1) .step-circle {
-            border-color: #3b82f6;
-            color: #3b82f6;
-        }
+  .stage:last-child {
+    border-bottom: 1px solid var(--border);
+  }
 
-        .step:nth-child(2) .step-circle {
-            border-color: #8b5cf6;
-            color: #8b5cf6;
-        }
+  .stage-num {
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-text);
+    letter-spacing: 0.05em;
+    padding-top: 3px;
+  }
 
-        .step:nth-child(3) .step-circle {
-            border-color: #06b6d4;
-            color: #06b6d4;
-        }
+  .stage-body {}
 
-        .step:nth-child(4) .step-circle {
-            border-color: #f59e0b;
-            color: #f59e0b;
-        }
+  .stage-title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
 
-        .step:nth-child(5) .step-circle {
-            border-color: #ec4899;
-            color: #ec4899;
-        }
+  .stage-title {
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(16px, 3vw, 20px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
 
-        .step:nth-child(6) .step-circle {
-            border-color: #dc2626;
-            color: #dc2626;
-        }
+  .stage-badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 100px;
+    flex-shrink: 0;
+  }
 
-        .step:nth-child(7) .step-circle {
-            border-color: #10b981;
-            color: #10b981;
-        }
+  .stage-desc {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 20px;
+    line-height: 1.65;
+  }
 
-        .step-number {
-            font-size: 20px;
-            font-weight: 700;
-        }
+  .stage-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
 
-        /* Step Title */
-        .step-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+  .meta-item {
+    font-size: 12px;
+    color: var(--gray-text);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
 
-        .step-title-icon {
-            font-size: 28px;
-            line-height: 1;
-        }
+  .meta-item::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gray-mid);
+    display: block;
+  }
 
-        /* Step Description */
-        .step-description {
-            font-size: 15px;
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 16px;
-        }
+  .stage-from-you {
+    background: var(--gray-light);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
 
-        /* Step Details */
-        .step-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
+  .from-you-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-text);
+    margin-bottom: 8px;
+  }
 
-        .detail {
-            display: flex;
-            gap: 8px;
-        }
+  .from-you-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
 
-        .detail-label {
-            font-weight: 600;
-            color: #333;
-            font-size: 13px;
-            min-width: 80px;
-        }
+  .from-you-list li {
+    font-size: 13px;
+    color: #444;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
 
-        .detail-value {
-            color: #666;
-            font-size: 13px;
-        }
+  .from-you-list li::before {
+    content: '→';
+    color: var(--gray-text);
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .step {
-                flex-direction: column;
-                margin-left: 0;
-            }
+  /* Badge colors per stage */
+  .badge-0 { background: var(--gray-mid); color: var(--black); }
+  .badge-1 { background: var(--accent-blue); color: #1a4a6e; }
+  .badge-2 { background: var(--accent-peach); color: #7a3a20; }
+  .badge-3 { background: var(--accent-yellow); color: #6a5010; }
+  .badge-4 { background: var(--accent-green); color: #2a5010; }
+  .badge-5 { background: var(--accent-lilac); color: #4a2a7a; }
 
-            .step-circle {
-                position: absolute;
-                left: -30px;
-                top: 20px;
-                width: 60px;
-                height: 60px;
-                margin-right: 0;
-            }
+  /* ── PROMISE ── */
+  .promise {
+    background: var(--black);
+    color: var(--white);
+    padding: 64px 24px;
+  }
 
-            .step-content {
-                margin-left: 60px;
-                max-width: none;
-            }
+  .promise-inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
 
-            .step-number {
-                font-size: 16px;
-            }
+  .promise-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-green);
+    margin-bottom: 28px;
+  }
 
-            .header h1 {
-                font-size: 32px;
-            }
+  .promise-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
 
-            .step-title {
-                font-size: 20px;
-            }
+  .promise-item {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    font-size: clamp(17px, 3vw, 22px);
+    font-weight: 600;
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
 
-            .step-details {
-                grid-template-columns: 1fr;
-            }
+  .promise-check {
+    color: var(--accent-green);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
 
-            .intro-blocks {
-                grid-template-columns: 1fr !important;
-            }
+  .promise-note {
+    font-size: 14px;
+    color: #777;
+    border-top: 1px solid #2a2a2a;
+    padding-top: 20px;
+    line-height: 1.6;
+  }
 
-            .pipeline::before {
-                left: -1px; /* circle center when circle is absolute left -30px, width 60 */
-                top: 30px;
-                bottom: 180px;
-            }
-        }
+  /* ── FOOTER ── */
+  footer {
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 13px;
+    color: var(--gray-text);
+  }
 
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 80px;
-            padding: 40px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
+  /* ── MOBILE ── */
+  @media (max-width: 600px) {
+    .method-inner {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
 
-        .footer h3 {
-            font-size: 20px;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-        }
+    .stage {
+      grid-template-columns: 40px 1fr;
+      gap: 12px;
+    }
 
-        .footer p {
-            font-size: 15px;
-            color: #666;
-            line-height: 1.6;
-        }
-    </style>
+    .stage-num {
+      font-size: 11px;
+    }
+
+    .logic-chain {
+      padding: 20px 18px;
+    }
+
+    .stage-meta {
+      gap: 10px;
+    }
+
+    .hero {
+      padding: 44px 20px 40px;
+    }
+
+    .section-label, .stages, .logic-block {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>Стратегический поиск работы</h1>
-            <p>7 этапов для переупаковки профиля и управляемого поиска</p>
-        </div>
 
-        <!-- Intro Section -->
-        <div class="intro">
-            <h2>Как это работает</h2>
-            <div class="intro-blocks">
-                <div class="intro-block">
-                    <div class="intro-block-title">📊 Метод</div>
-                    <div class="intro-block-content">
-                        <strong>Анализируем</strong> Начинаем с анализа реального рынка (вакансии, требования, тренды), а не ощущений. Используем AI для анализа данных, но все решения — твои.
-                    </div>
-                </div>
-                <div class="intro-block">
-                    <div class="intro-block-title">✅ Честность</div>
-                    <div class="intro-block-content">
-                        <strong>Факты первичны</strong> Все в CV, LinkedIn и письмах основано на твоих реальных фактах. Если чего-то нет — не додумываем, спрашиваем.
-                    </div>
-                </div>
-                <div class="intro-block">
-                    <div class="intro-block-title">🎯 Гарантии</div>
-                    <div class="intro-block-content">
-                        <strong>Обещаю процесс, не результат</strong> К концу 2-4 недель у тебя будет CV, стратегия и система поиска. Оффер зависит от рынка и тебя.
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- HEADER -->
+<header class="site-header">
+  <a class="logo" href="#">CV-<span>LAB</span></a>
+  <span style="font-size: 13px; color: var(--gray-text);">Карьерный консалтинг</span>
+</header>
 
-        <!-- Pipeline -->
-        <div class="pipeline">
-            <!-- Step 1: Extraction -->
-            <div class="step">
-                <div class="step-circle">
-                    <span class="step-number">1</span>
-                </div>
-                <div class="step-content">
-                    <div class="step-title">
-                        <span class="step-title-icon">📋</span>
-                        Сбор информации
-                    </div>
-                    <div class="step-description">
-                        Собираю контекст твоего опыта: где ты работал, что ты реально делал, какие результаты достиг и что ищешь дальше.
-                    </div>
-                    <div class="step-details">
-                        <div class="detail">
-                            <span class="detail-label">Сроки</span>
-                            <span class="detail-value">3-10 дней</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Моё участие</span>
-                            <span class="detail-value">Опросник + 1-2 созвона</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">На выходе</span>
-                            <span class="detail-value">Полный профиль</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Процесс</span>
-                            <span class="detail-value">Вопросы + анализ</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-tag">Как я работаю</span>
+  <h1>Осмысленный<br><em>поиск работы</em></h1>
+  <p class="hero-lead">
+    6 этапов — от понимания ситуации до управляемого поиска. Без массовых откликов, без шаблонных резюме.
+    Только факты, анализ и чёткая стратегия.
+  </p>
+</section>
 
-            <!-- Step 2: Diagnosis -->
-            <div class="step">
-                <div class="step-circle">
-                    <span class="step-number">2</span>
-                </div>
-                <div class="step-content">
-                    <div class="step-title">
-                        <span class="step-title-icon">🔍</span>
-                        Диагностика
-                    </div>
-                    <div class="step-description">
-                        Анализирую, почему текущий подход не работает, и формулирую гипотезы: какую роль, в каких компаниях и на каком рынке искать.
-                    </div>
-                    <div class="step-details">
-                        <div class="detail">
-                            <span class="detail-label">Сроки</span>
-                            <span class="detail-value">2-3 дня</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Моё участие</span>
-                            <span class="detail-value">Анализ + валидация</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">На выходе</span>
-                            <span class="detail-value">Гипотезы поиска</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Процесс</span>
-                            <span class="detail-value">Частотный анализ</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 3: JD Collection -->
-            <div class="step">
-                <div class="step-circle">
-                    <span class="step-number">3</span>
-                </div>
-                <div class="step-content">
-                    <div class="step-title">
-                        <span class="step-title-icon">🎯</span>
-                        Сбор вакансий
-                    </div>
-                    <div class="step-description">
-                        Собираю 15-20 реальных вакансий из твоего целевого рынка. Ты предоставляешь интересные, я ищу дополнительные для проверки гипотез.
-                    </div>
-                    <div class="step-details">
-                        <div class="detail">
-                            <span class="detail-label">Сроки</span>
-                            <span class="detail-value">1-2 дня</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Моё участие</span>
-                            <span class="detail-value">Ручной поиск + сбор</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">На выходе</span>
-                            <span class="detail-value">Набор вакансий</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Процесс</span>
-                            <span class="detail-value">LinkedIn, Indeed, спец.доски</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 4: Market Positioning -->
-            <div class="step">
-                <div class="step-circle">
-                    <span class="step-number">4</span>
-                </div>
-                <div class="step-content">
-                    <div class="step-title">
-                        <span class="step-title-icon">📊</span>
-                        Позиционирование
-                    </div>
-                    <div class="step-description">
-                        Анализирую рынок: какие навыки повторяются, где разрыв между тобой и требованиями. Формулируем позиционирование на целевые роли — одна ясная фраза.
-                    </div>
-                    <div class="step-details">
-                        <div class="detail">
-                            <span class="detail-label">Сроки</span>
-                            <span class="detail-value">2-4 часа</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Моё участие</span>
-                            <span class="detail-value">Частотный анализ JD</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">На выходе</span>
-                            <span class="detail-value">Стратегия позиционирования</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Процесс</span>
-                            <span class="detail-value">Gap-map + выводы</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 5: Packaging -->
-            <div class="step">
-                <div class="step-circle">
-                    <span class="step-number">5</span>
-                </div>
-                <div class="step-content">
-                    <div class="step-title">
-                        <span class="step-title-icon">✨</span>
-                        Упаковка
-                    </div>
-                    <div class="step-description">
-                        Создаю твои инструменты: CV с фокусом на результаты, обновляю LinkedIn, пишу шаблон сопроводительного письма и стратегию поиска.
-                    </div>
-                    <div class="step-details">
-                        <div class="detail">
-                            <span class="detail-label">Сроки</span>
-                            <span class="detail-value">5-10 дней</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Моё участие</span>
-                            <span class="detail-value">Черновики + правки</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">На выходе</span>
-                            <span class="detail-value">CV, LinkedIn, письмо, стратегия</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Процесс</span>
-                            <span class="detail-value">2-3 итерации обратной связи</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 6: Search -->
-            <div class="step">
-                <div class="step-circle">
-                    <span class="step-number">6</span>
-                </div>
-                <div class="step-content">
-                    <div class="step-title">
-                        <span class="step-title-icon">🚀</span>
-                        Поиск
-                    </div>
-                    <div class="step-description">
-                        Ты начинаешь отправлять отклики с твоими материалами. Я отслеживаю результаты, измеряю конверсию и подстраиваю стратегию под то, что работает.
-                    </div>
-                    <div class="step-details">
-                        <div class="detail">
-                            <span class="detail-label">Сроки</span>
-                            <span class="detail-value">Текущий процесс</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Моё участие</span>
-                            <span class="detail-value">Еженедельная сверка</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">На выходе</span>
-                            <span class="detail-value">Управляемый процесс</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Процесс</span>
-                            <span class="detail-value">Трекинг + адаптация</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 7: Support -->
-            <div class="step">
-                <div class="step-circle">
-                    <span class="step-number">7</span>
-                </div>
-                <div class="step-content">
-                    <div class="step-title">
-                        <span class="step-title-icon">💼</span>
-                        Сопровождение
-                    </div>
-                    <div class="step-description">
-                        По запросу и необходимости: разбор конкретных кейсов для интервью, подготовка к встречам, адаптация стратегии поиска, дополнительный анализ результатов.
-                    </div>
-                    <div class="step-details">
-                        <div class="detail">
-                            <span class="detail-label">Сроки</span>
-                            <span class="detail-value">По необходимости</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Моё участие</span>
-                            <span class="detail-value">По запросу</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">На выходе</span>
-                            <span class="detail-value">Дополнительная поддержка</span>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-label">Процесс</span>
-                            <span class="detail-value">По договорённости</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <h3>Готов начать?</h3>
-            <p>
-                Мы пройдём все этапы вместе. Ты устанавливаешь темп, я управляю стратегией и итерациями. За 2-4 недели ты получишь готовые инструменты и чёткий план.
-            </p>
-        </div>
+<!-- METHOD STRIP -->
+<div class="method-strip">
+  <div class="method-inner">
+    <div class="method-item">
+      <div class="method-icon">📊</div>
+      <div>
+        <h3>Данные первичны</h3>
+        <p>Начинаем с анализа реального рынка — вакансий, трендов, конкурентов. Не с ощущений.</p>
+      </div>
     </div>
+    <div class="method-item">
+      <div class="method-icon">✅</div>
+      <div>
+        <h3>Только факты</h3>
+        <p>Всё в резюме и LinkedIn основано на твоих реальных достижениях. Ничего не придумываем.</p>
+      </div>
+    </div>
+    <div class="method-item">
+      <div class="method-icon">🎯</div>
+      <div>
+        <h3>Процесс, не магия</h3>
+        <p>Обещаю стратегию и инструменты. Результат зависит от рынка и от твоего участия.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIC -->
+<div class="section-label">
+  <h2>Логика работы</h2>
+  <p>Пайплайн итерационный — понимание уточняется по мере продвижения.</p>
+</div>
+
+<div class="logic-block">
+  <div class="logic-chain">
+    <div class="logic-step">
+      <div class="logic-dot">🔍</div>
+      <div class="logic-text">
+        <strong>Сначала смотрим, что не работает</strong>
+        <span>Анализируем CV, LinkedIn, историю откликов — ставим диагноз</span>
+      </div>
+    </div>
+    <div class="logic-step">
+      <div class="logic-dot">💬</div>
+      <div class="logic-text">
+        <strong>Потом вытягиваем реальный опыт</strong>
+        <span>Вопросы, сессии, факты — строим полную картину</span>
+      </div>
+    </div>
+    <div class="logic-step">
+      <div class="logic-dot">📋</div>
+      <div class="logic-text">
+        <strong>Смотрим на рынок</strong>
+        <span>Собираем вакансии, разбираем язык рынка, находим разрывы</span>
+      </div>
+    </div>
+    <div class="logic-step">
+      <div class="logic-dot">✨</div>
+      <div class="logic-text">
+        <strong>Упаковываем правильно</strong>
+        <span>CV, LinkedIn, принципы письма — под конкретную роль и рынок</span>
+      </div>
+    </div>
+    <div class="logic-step">
+      <div class="logic-dot">🚀</div>
+      <div class="logic-text">
+        <strong>Запускаем и следим за данными</strong>
+        <span>Корректируем стратегию по первым результатам</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGES -->
+<div class="section-label">
+  <h2>Этапы</h2>
+</div>
+
+<div class="stages">
+
+  <!-- 0 -->
+  <div class="stage">
+    <div class="stage-num">00</div>
+    <div class="stage-body">
+      <div class="stage-title-row">
+        <span class="stage-title">Знакомство</span>
+        <span class="stage-badge badge-0">30 мин</span>
+      </div>
+      <p class="stage-desc">
+        Короткий разговор — понимаем, подходим ли мы друг другу. Берусь только за те кейсы, где могу реально помочь.
+      </p>
+      <div class="stage-meta">
+        <span class="meta-item">Созвон или переписка</span>
+        <span class="meta-item">Бесплатно</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1 -->
+  <div class="stage">
+    <div class="stage-num">01</div>
+    <div class="stage-body">
+      <div class="stage-title-row">
+        <span class="stage-title">Аналитика</span>
+        <span class="stage-badge badge-1">3–5 дней</span>
+      </div>
+      <p class="stage-desc">
+        Смотрю на текущую ситуацию: CV, LinkedIn, историю откликов, письма. Выдвигаю гипотезы —
+        почему поиск буксует и куда, предположительно, стоит целиться: роль, тип компаний, рынок.
+      </p>
+      <div class="stage-meta">
+        <span class="meta-item">Работа на моей стороне</span>
+        <span class="meta-item">Установочная встреча</span>
+        <span class="meta-item">Выход: аналитика + гипотезы</span>
+      </div>
+      <div class="stage-from-you">
+        <div class="from-you-label">От тебя нужно</div>
+        <ul class="from-you-list">
+          <li>CV (все версии, которые есть)</li>
+          <li>Ссылка на LinkedIn</li>
+          <li>Трекер откликов, если ведёшь</li>
+          <li>Примеры писем, если есть</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="stage">
+    <div class="stage-num">02</div>
+    <div class="stage-body">
+      <div class="stage-title-row">
+        <span class="stage-title">Сбор опыта</span>
+        <span class="stage-badge badge-2">5–14 дней</span>
+      </div>
+      <p class="stage-desc">
+        Извлекаю реальный опыт через вопросы блоками — отвечаешь письменно или надиктовываешь голосом,
+        как рассказываешь другу. Параллельно анализирую рынок: собираю вакансии, разбираю язык рынка,
+        нахожу разрывы между твоим профилем и тем, что ищут работодатели.
+        На выходе — позиционирование: одна чёткая фраза о том, кто ты для рынка.
+      </p>
+      <div class="stage-meta">
+        <span class="meta-item">Вопросы блоками — в своём темпе</span>
+        <span class="meta-item">Анализ 10–20 вакансий</span>
+        <span class="meta-item">Выход: позиционирование + профсловарь</span>
+      </div>
+      <div class="stage-from-you">
+        <div class="from-you-label">От тебя нужно</div>
+        <ul class="from-you-list">
+          <li>Отвечать на вопросы подробно — не резюме, а живой рассказ</li>
+          <li>Скинуть 5–7 вакансий, которые привлекают</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="stage">
+    <div class="stage-num">03</div>
+    <div class="stage-body">
+      <div class="stage-title-row">
+        <span class="stage-title">Упаковка</span>
+        <span class="stage-badge badge-3">5–10 дней</span>
+      </div>
+      <p class="stage-desc">
+        Создаю финальные инструменты под зафиксированное позиционирование: CV с акцентом на результаты,
+        обновлённый LinkedIn, принципы составления CL — логика и тон конкретно под твой профиль.
+        С этим набором идём в поиск.
+      </p>
+      <div class="stage-meta">
+        <span class="meta-item">Черновики + 2–3 итерации</span>
+        <span class="meta-item">Факт-чек на твоей стороне</span>
+        <span class="meta-item">Выход: CV · LinkedIn · принципы CL · позиционирование</span>
+      </div>
+      <div class="stage-from-you">
+        <div class="from-you-label">От тебя нужно</div>
+        <ul class="from-you-list">
+          <li>Проверить черновик — только ты знаешь правду о своей работе</li>
+          <li>Дать обратную связь по итерациям (обычно 2–3 круга)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="stage">
+    <div class="stage-num">04</div>
+    <div class="stage-body">
+      <div class="stage-title-row">
+        <span class="stage-title">Поиск</span>
+        <span class="stage-badge badge-4">Процесс</span>
+      </div>
+      <p class="stage-desc">
+        Ты отправляешь отклики, я слежу за данными. Смотрим вместе: что работает, что нет,
+        где канал или посыл не тот. Корректируем стратегию по ходу.
+      </p>
+      <div class="stage-meta">
+        <span class="meta-item">Сверка раз в неделю</span>
+        <span class="meta-item">Оценка через 2–4 недели после запуска</span>
+      </div>
+      <div class="stage-from-you">
+        <div class="from-you-label">От тебя нужно</div>
+        <ul class="from-you-list">
+          <li>Вести трекер откликов — простая таблица, 6 колонок</li>
+          <li>Адаптировать CL по нашим принципам под каждую вакансию</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="stage">
+    <div class="stage-num">05</div>
+    <div class="stage-body">
+      <div class="stage-title-row">
+        <span class="stage-title">Сопровождение</span>
+        <span class="stage-badge badge-5">По запросу</span>
+      </div>
+      <p class="stage-desc">
+        Разбор конкретных ситуаций: подготовка к встрече, адаптация стратегии, анализ обратной связи после
+        отказа. Подключаюсь когда нужно — не по расписанию.
+      </p>
+      <div class="stage-meta">
+        <span class="meta-item">Формат: переписка или созвон</span>
+        <span class="meta-item">По необходимости</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PROMISE -->
+<div class="promise">
+  <div class="promise-inner">
+    <p class="promise-label">Помогаю создать процесс поиска</p>
+    <div class="promise-list">
+      <div class="promise-item">
+        <span class="promise-check">✓</span>
+        <span>CV, которое чётко позиционирует тебя на рынке</span>
+      </div>
+      <div class="promise-item">
+        <span class="promise-check">✓</span>
+        <span>Понимание, куда целиться — и почему именно туда</span>
+      </div>
+      <div class="promise-item">
+        <span class="promise-check">✓</span>
+        <span>Система поиска вместо хаотичных откликов</span>
+      </div>
+    </div>
+    <p class="promise-note">Результат зависит от того, насколько ты включён в процесс.</p>
+  </div>
+</div>
+
+<footer>
+  CV-LAB · Карьерный консалтинг
+</footer>
+
 </body>
 </html>
