@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>AI-tools: Пайплайн с Claude и Cursor</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --bg-tertiary: #f1f3f5;
+      --text: #1a1a2e;
+      --text-secondary: #6c757d;
+      --border: #e9ecef;
+      --accent: #6c63ff;
+      --accent-hover: #5a52d5;
+      --accent-light: #eeecff;
+      --pin-bg: #fffbeb;
+      --pin-border: #f59e0b;
+      --pin-text: #78350f;
+      --pin-title: #92400e;
+      --code-bg: #1e1e2e;
+      --code-text: #cdd6f4;
+      --sidebar-width: 272px;
+      --header-h: 56px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    }
+    [data-theme="dark"] {
+      --bg: #0f1117;
+      --bg-secondary: #171b26;
+      --bg-tertiary: #1e2230;
+      --text: #e2e8f0;
+      --text-secondary: #8892a4;
+      --border: #2a2f3e;
+      --accent: #818cf8;
+      --accent-hover: #6366f1;
+      --accent-light: #1e1f3a;
+      --pin-bg: #1c1500;
+      --pin-border: #d97706;
+      --pin-text: #fde68a;
+      --pin-title: #fcd34d;
+      --code-bg: #0d1117;
+      --code-text: #e6edf3;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      transition: background 0.25s, color 0.25s;
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0; left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 200;
+      transition: transform 0.3s cubic-bezier(.4,0,.2,1), background 0.25s;
+      scrollbar-width: thin;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .sidebar-logo {
+      display: flex; align-items: center; gap: 10px;
+      padding: 18px 20px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-logo-icon {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, var(--accent), #e91e8c);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .sidebar-logo-text {
+      font-size: 12px; font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.3;
+    }
+
+    .toc-nav { padding: 10px 0 20px; }
+    .toc-nav a {
+      display: block; padding: 5px 20px;
+      color: var(--text-secondary); text-decoration: none;
+      font-size: 13px; border-left: 2px solid transparent;
+      transition: all 0.15s; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .toc-nav a:hover { color: var(--text); background: var(--accent-light); border-left-color: var(--border); }
+    .toc-nav a.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-light); font-weight: 600; }
+    .toc-part { font-weight: 700 !important; font-size: 12.5px !important; color: var(--text) !important; margin-top: 10px; padding-top: 10px !important; border-top: 1px solid var(--border); }
+    .toc-part:first-child { border-top: none; margin-top: 0; }
+    .toc-sub { padding-left: 34px !important; font-size: 12px !important; }
+
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 199; backdrop-filter: blur(2px); }
+    .sidebar-overlay.open { display: block; }
+
+    /* ─── MAIN ─── */
+    .main { margin-left: var(--sidebar-width); flex: 1; min-width: 0; }
+
+    .site-header {
+      position: sticky; top: 0; height: var(--header-h);
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px 0 28px; z-index: 50;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .menu-toggle {
+      display: none; background: none; border: none;
+      cursor: pointer; color: var(--text); font-size: 20px; padding: 4px;
+      border-radius: 6px; transition: background 0.15s;
+    }
+    .menu-toggle:hover { background: var(--bg-tertiary); }
+    .header-title { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+
+    .theme-toggle {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      cursor: pointer; padding: 6px 14px; border-radius: 20px;
+      font-size: 13px; color: var(--text); transition: all 0.15s; white-space: nowrap;
+    }
+    .theme-toggle:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+    /* ─── CONTENT ─── */
+    .content { max-width: 740px; margin: 0 auto; padding: 48px 40px 80px; }
+
+    .hero {
+      margin-bottom: 48px; padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-tag {
+      display: inline-block; font-size: 12px; font-weight: 600;
+      color: var(--accent); background: var(--accent-light);
+      padding: 3px 10px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px;
+    }
+    .hero h1 { font-size: 32px; font-weight: 700; line-height: 1.25; margin-bottom: 14px; letter-spacing: -0.02em; }
+    .hero-desc { font-size: 16px; color: var(--text-secondary); line-height: 1.7; max-width: 560px; }
+
+    .part-divider {
+      display: flex; align-items: center; gap: 14px;
+      margin: 52px 0 32px; padding-top: 8px;
+    }
+    .part-badge {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      background: var(--accent-light); padding: 3px 10px;
+      border-radius: 20px; text-transform: uppercase; letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+    .part-line { flex: 1; height: 1px; background: var(--border); }
+    .part-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; margin-top: 0; }
+
+    h2 { font-size: 22px; font-weight: 700; margin: 40px 0 14px; line-height: 1.3; }
+    h3 { font-size: 17px; font-weight: 600; margin: 28px 0 10px; }
+    p { margin-bottom: 16px; }
+    ul, ol { margin: 0 0 16px 0; padding-left: 24px; }
+    li { margin-bottom: 6px; }
+    strong { font-weight: 600; }
+
+    /* ─── TABLE ─── */
+    .table-wrap { overflow-x: auto; margin: 20px 0 24px; border-radius: 10px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    thead { background: var(--bg-secondary); }
+    th { padding: 10px 16px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+    td { padding: 10px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-secondary); }
+
+    /* ─── CODE ─── */
+    pre {
+      background: var(--code-bg); color: var(--code-text);
+      padding: 18px 20px; border-radius: 10px; overflow-x: auto;
+      font-size: 13.5px; line-height: 1.6; margin: 16px 0 24px;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    }
+    code {
+      background: var(--bg-tertiary); color: var(--accent);
+      padding: 2px 6px; border-radius: 4px; font-size: 13px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+
+    /* ─── PIN (примечание) ─── */
+    .pin {
+      background: var(--pin-bg); border: 1px solid var(--pin-border);
+      border-radius: 10px; padding: 14px 18px; margin: 20px 0;
+    }
+    .pin-title { font-size: 12px; font-weight: 700; color: var(--pin-title); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+    .pin p { color: var(--pin-text); font-size: 14px; margin: 0; line-height: 1.65; }
+
+    /* ─── TIP (совет) ─── */
+    .tip {
+      background: var(--accent-light); border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 20px 0;
+    }
+    .tip p { color: var(--text); font-size: 14px; margin: 0; line-height: 1.65; }
+    .tip-title { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+
+    /* ─── FLOW DIAGRAM ─── */
+    .flow {
+      display: flex; align-items: center; flex-wrap: wrap;
+      gap: 8px; margin: 20px 0 24px; padding: 20px;
+      background: var(--bg-secondary); border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .flow-step {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 16px;
+      font-size: 13px; font-weight: 500; text-align: center;
+      min-width: 120px;
+    }
+    .flow-step .step-label { font-size: 10px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .flow-step .step-name { color: var(--text); }
+    .flow-step .step-sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+    .flow-arrow { color: var(--text-secondary); font-size: 18px; }
+
+    /* ─── COMMAND CARD ─── */
+    .cmd-grid { display: grid; gap: 12px; margin: 16px 0 24px; }
+    .cmd-card {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px 18px;
+    }
+    .cmd-title { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 6px; }
+    .cmd-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px; }
+    .cmd-card pre { margin: 0; padding: 10px 14px; font-size: 12.5px; }
+
+    /* ─── BADGE ─── */
+    .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin: 0 2px; }
+    .badge-claude { background: #ede9fe; color: #6d28d9; }
+    .badge-cursor { background: #dcfce7; color: #15803d; }
+    .badge-cowork { background: #fef3c7; color: #b45309; }
+    [data-theme="dark"] .badge-claude { background: #2e1065; color: #c4b5fd; }
+    [data-theme="dark"] .badge-cursor { background: #052e16; color: #86efac; }
+    [data-theme="dark"] .badge-cowork { background: #1c1a00; color: #fde68a; }
+
+    blockquote {
+      border-left: 3px solid var(--accent); margin: 20px 0;
+      padding: 12px 20px; background: var(--bg-secondary); border-radius: 0 8px 8px 0;
+    }
+    blockquote p { margin: 0; color: var(--text-secondary); font-style: italic; }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      margin-top: 64px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 13px; color: var(--text-secondary);
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .menu-toggle { display: block; }
+      .content { padding: 32px 20px 60px; }
+      .flow { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🛠</div>
+      <div class="sidebar-logo-text">AI-tools<br>Claude · Cursor · Cowork</div>
+    </div>
+    <nav class="toc-nav">
+      <a href="#hero" class="toc-part">Введение</a>
+      <a href="#part1" class="toc-part">Часть 1. Мой стек</a>
+      <a href="#claude-models">Модели Claude</a>
+      <a href="#my-pipeline" class="toc-sub">Мой пайплайн</a>
+      <a href="#part2" class="toc-part">Часть 2. Cursor</a>
+      <a href="#cursor-auto">Auto vs Composer</a>
+      <a href="#cursor-workflow" class="toc-sub">Workflow для кода</a>
+      <a href="#cursor-prompts" class="toc-sub">Готовые промпты</a>
+      <a href="#part3" class="toc-part">Часть 3. Claude Code</a>
+      <a href="#claude-code-what">Что это</a>
+      <a href="#claude-code-use" class="toc-sub">Когда использовать</a>
+      <a href="#part4" class="toc-part">Часть 4. Cowork</a>
+      <a href="#cowork-what">Что это</a>
+      <a href="#cowork-cases" class="toc-sub">Кейсы</a>
+      <a href="#cowork-tips" class="toc-sub">Малоизвестные фишки</a>
+      <a href="#cowork-prompts" class="toc-sub">Готовые команды</a>
+      <a href="#part5" class="toc-part">Часть 5. Распределение задач</a>
+      <a href="#task-routing">Какому инструменту что</a>
+    </nav>
+  </aside>
+  <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="site-header">
+      <div class="header-left">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <span class="header-title">AI-tools: Пайплайн с Claude и Cursor</span>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙 Тёмная</button>
+    </header>
+
+    <div class="content">
+
+      <!-- HERO -->
+      <div class="hero" id="hero">
+        <div class="hero-tag">✦ Справочник · Март 2026</div>
+        <h1>AI-tools: Пайплайн с Claude и Cursor</h1>
+        <p class="hero-desc">Практический справочник по Claude, Cursor и Cowork. Не теория — конкретные команды, готовые промпты и правила распределения задач между инструментами.</p>
+      </div>
+
+      <!-- ЧАСТЬ 1 -->
+      <div class="part-divider" id="part1">
+        <span class="part-badge">Часть 1</span>
+        <div class="part-line"></div>
+      </div>
+      <h2 class="part-title">Мой стек и модели Claude</h2>
+
+      <section id="claude-models">
+        <h3>Модели Claude (март 2026)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Модель</th><th>Для чего</th><th>Особенность</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Sonnet 4.6</strong></td><td>Основная рабочая лошадка</td><td>Скорость + качество, контекст 1M токенов</td></tr>
+              <tr><td><strong>Opus 4.6</strong></td><td>Сложный анализ, архитектура</td><td>Адаптивное мышление, до 128k выходных токенов</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Тарифы: когда что выбирать</h3>
+        <ul>
+          <li><strong>Pro (~$17/мес)</strong> — среднее использование, ~100–200 запросов/нед. Если часто упираешься в лимиты — это сигнал переходить.</li>
+          <li><strong>Max (~$100/мес)</strong> — power-user, 5–20x больше лимитов, включает Claude Code и Computer Use.</li>
+        </ul>
+
+        <div class="pin">
+          <div class="pin-title">📌 Про токены и русский язык</div>
+          <p>Русский текст занимает в 2–3 раза больше токенов чем английский. Для промптов это не критично, но при анализе больших документов — учитывай. Контекстное окно Sonnet 4.6 — 1M токенов, это ~700 000 слов на русском.</p>
+        </div>
+      </section>
+
+      <section id="my-pipeline">
+        <h3>Мой пайплайн</h3>
+        <p>Как задачи распределяются между инструментами в реальной работе:</p>
+
+        <div class="flow">
+          <div class="flow-step">
+            <div class="step-label">Идея / анализ</div>
+            <div class="step-name">🧠 Claude</div>
+            <div class="step-sub">claude.ai или Cowork</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="step-label">Генерация кода</div>
+            <div class="step-name">⚡ Claude Code</div>
+            <div class="step-sub">терминал</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="step-label">Доработка</div>
+            <div class="step-name">✏️ Cursor Auto</div>
+            <div class="step-sub">Tab-дополнение</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="step-label">Review</div>
+            <div class="step-name">🔍 Cursor Composer</div>
+            <div class="step-sub">Ctrl+K</div>
+          </div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-title">💡 Ключевой принцип</div>
+          <p>Claude думает и генерирует, Cursor полирует и проверяет. Не надо делать review в Claude если код уже в Cursor — Composer сделает лучше и дешевле по токенам.</p>
+        </div>
+      </section>
+
+      <!-- ЧАСТЬ 2 -->
+      <div class="part-divider" id="part2">
+        <span class="part-badge">Часть 2</span>
+        <div class="part-line"></div>
+      </div>
+      <h2 class="part-title">Cursor: Auto vs Composer</h2>
+
+      <section id="cursor-auto">
+        <h3>Два разных инструмента</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Инструмент</th><th>Как вызвать</th><th>Что делает</th><th>Лимиты</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Auto (Tab)</strong></td>
+                <td>Автоматически при наборе</td>
+                <td>Дополняет строку или функцию, работает в фоне</td>
+                <td>Минимальные, включено всегда</td>
+              </tr>
+              <tr>
+                <td><strong>Composer</strong></td>
+                <td>Ctrl+K (Cmd+K на Mac)</td>
+                <td>Анализирует весь проект, multi-file редактирование</td>
+                <td>3–10 запросов/операция, 1–2 раза/час</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pin">
+          <div class="pin-title">📌 Важно</div>
+          <p>Auto и Composer — это НЕ одно и то же. "Auto" в настройках Cursor не включает Composer. Выбор модели "Auto" означает автовыбор между Sonnet и GPT-4o — Composer надо вызывать отдельно через Ctrl+K.</p>
+        </div>
+      </section>
+
+      <section id="cursor-workflow">
+        <h3>Workflow без упора в лимиты</h3>
+        <pre>09:00–11:00  Auto (Tab) → пишешь новые фичи  (~20–30 Tab)
+11:00        Composer   → "Review morning work"  (1 запрос)
+13:00–15:00  Auto (Tab) → допиливаешь            (~20 Tab)
+15:00        Composer   → "Final refactoring"    (1 запрос)
+17:00        Composer   → "Prep for commit"      (1 запрос)
+
+Итого: ~60 Auto + 3 Composer = хорошо вписывается в Pro $20</pre>
+      </section>
+
+      <section id="cursor-prompts">
+        <h3>Готовые промпты для Composer</h3>
+        <div class="cmd-grid">
+          <div class="cmd-card">
+            <div class="cmd-title">Review кода</div>
+            <div class="cmd-desc">Анализирует проект на баги, стиль, производительность</div>
+            <pre>"Review this codebase for bugs, naming consistency, and performance. Show me the top 5 issues."</pre>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-title">Рефакторинг модуля</div>
+            <div class="cmd-desc">Приводит код к чистому виду без изменения логики</div>
+            <pre>"Refactor src/[module] — cleaner functions, consistent error handling, remove duplication. Keep logic identical."</pre>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-title">Подготовка к коммиту</div>
+            <div class="cmd-desc">Финальная проверка перед git push</div>
+            <pre>"Review all changes since last commit. Fix obvious issues, suggest commit message."</pre>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-title">Добавить типы</div>
+            <div class="cmd-desc">Для TypeScript проектов</div>
+            <pre>"Add TypeScript types to all functions in src/. Use strict mode. Don't change logic."</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ЧАСТЬ 3 -->
+      <div class="part-divider" id="part3">
+        <span class="part-badge">Часть 3</span>
+        <div class="part-line"></div>
+      </div>
+      <h2 class="part-title">Claude Code</h2>
+
+      <section id="claude-code-what">
+        <h3>Что это</h3>
+        <p>Claude Code — это Claude в терминале. Не плагин, не IDE. Запускается командой <code>claude</code> в командной строке и работает с файлами напрямую.</p>
+
+        <ul>
+          <li>Видит весь репозиторий (1M+ токенов контекста)</li>
+          <li>Выполняет команды в терминале сам</li>
+          <li>Работает с Git: читает историю, делает коммиты</li>
+          <li>Приватность: обработка локальная, не в облаке</li>
+        </ul>
+
+        <div class="tip">
+          <div class="tip-title">💡 Где взять</div>
+          <p>Claude Code входит в тариф Max. Устанавливается через npm: <code>npm install -g @anthropic-ai/claude-code</code></p>
+        </div>
+      </section>
+
+      <section id="claude-code-use">
+        <h3>Когда использовать Claude Code, а не Cursor</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Задача</th><th>Лучший инструмент</th></tr></thead>
+            <tbody>
+              <tr><td>Написать фичу с нуля по описанию</td><td><span class="badge badge-claude">Claude Code</span></td></tr>
+              <tr><td>Проанализировать весь репозиторий</td><td><span class="badge badge-claude">Claude Code</span></td></tr>
+              <tr><td>Создать архитектуру проекта</td><td><span class="badge badge-claude">Claude Code</span></td></tr>
+              <tr><td>Автоматизировать задачи в терминале</td><td><span class="badge badge-claude">Claude Code</span></td></tr>
+              <tr><td>Доработать готовый код</td><td><span class="badge badge-cursor">Cursor Auto</span></td></tr>
+              <tr><td>Review и рефакторинг</td><td><span class="badge badge-cursor">Cursor Composer</span></td></tr>
+              <tr><td>Быстрое автодополнение в реальном времени</td><td><span class="badge badge-cursor">Cursor Auto</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Готовые команды Claude Code</h3>
+        <div class="cmd-grid">
+          <div class="cmd-card">
+            <div class="cmd-title">Генерация фичи</div>
+            <pre>claude "Create a Telegram bot handler for /start command.
+Use existing project structure. Add error handling."</pre>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-title">Анализ репозитория</div>
+            <pre>claude "Analyze this codebase. What are the main modules,
+dependencies, and potential issues?"</pre>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-title">Обработка файлов по маске</div>
+            <pre>claude "Add YAML frontmatter to all .md files in ./inbox/
+that don't have it yet. Use tags from content."</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ЧАСТЬ 4 -->
+      <div class="part-divider" id="part4">
+        <span class="part-badge">Часть 4</span>
+        <div class="part-line"></div>
+      </div>
+      <h2 class="part-title">Cowork</h2>
+
+      <section id="cowork-what">
+        <h3>Что это</h3>
+        <p>Cowork — десктопное приложение Anthropic (бета). Claude с прямым доступом к файлам на твоём компьютере. В отличие от claude.ai — видит папки, читает и пишет файлы, работает как агент.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Cowork</th><th>claude.ai</th></tr></thead>
+            <tbody>
+              <tr><td>Читает файлы с компьютера напрямую</td><td>Только загруженные вручную</td></tr>
+              <tr><td>Пишет и редактирует файлы</td><td>Только показывает код</td></tr>
+              <tr><td>Работает как агент (несколько шагов)</td><td>Один ответ за раз</td></tr>
+              <tr><td>Нет памяти между сессиями</td><td>Нет памяти между сессиями</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="cowork-cases">
+        <h3>Реальные кейсы</h3>
+
+        <div class="cmd-grid">
+          <div class="cmd-card">
+            <div class="cmd-title">🗂 Обработка базы знаний</div>
+            <div class="cmd-desc">Читает папку с MD-файлами, добавляет YAML-шапки, раскладывает по категориям</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-title">📊 Финансовый анализ</div>
+            <div class="cmd-desc">Принимает скриншоты банковских выгрузок, категоризирует транзакции, заполняет Google Sheets через Apps Script</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-title">📚 Чистка документов</div>
+            <div class="cmd-desc">Читает сырые конспекты, убирает галлюцинации GPT, оставляет только реально применимые вещи</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-title">🔧 Скрипты и автоматизация</div>
+            <div class="cmd-desc">Пишет и запускает Python/bash скрипты прямо на твоём компьютере, проверяет результат</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="cowork-tips">
+        <h3>Малоизвестные фишки Cowork</h3>
+
+        <h3>1. _context.md — мгновенный старт</h3>
+        <p>Cowork не помнит предыдущие сессии. Положи файл <code>_context.md</code> в рабочую папку — в начале каждой сессии пиши <code>прочитай _context.md</code>. Он загрузит весь контекст за один запрос вместо 10 минут объяснений.</p>
+
+        <h3>2. Батч-обработка экономит токены</h3>
+        <p>Вместо "обработай файл 1, потом файл 2" — давай одну задачу на всю папку. Cowork сам разберётся с итерацией, а ты платишь за один системный промпт.</p>
+
+        <h3>3. Отчёт вместо диалога</h3>
+        <p>Добавляй в конец любого запроса: <em>"не объясняй что делаешь — сделай и выдай отчёт в конце"</em>. Экономит 30–50% токенов на длинных задачах.</p>
+
+        <h3>4. Apps Script как мост к Google</h3>
+        <p>Cowork не может писать напрямую в Google Sheets (MCP работает только с Docs). Но он пишет Apps Script который ты вставляешь в таблицу один раз — и дальше данные пишутся через скрипт. Это стабильнее чем API.</p>
+
+        <h3>5. Разные папки — разные контексты</h3>
+        <p>Открывай Cowork из разных рабочих папок для разных задач. Он не будет путать базу знаний с финансами — контекст изолирован по папке.</p>
+
+        <div class="pin">
+          <div class="pin-title">📌 Про токены в Cowork</div>
+          <p>Первичная обработка большого количества файлов всегда дорогая — Cowork читает каждый файл полностью. Это разовая работа. После неё — работа с базой дешевеет в 3–5 раз потому что файлы маленькие и структурированные.</p>
+        </div>
+      </section>
+
+      <section id="cowork-prompts">
+        <h3>Готовые команды для Cowork</h3>
+        <div class="cmd-grid">
+          <div class="cmd-card">
+            <div class="cmd-title">Старт сессии</div>
+            <pre>прочитай _context.md</pre>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-title">Обработка inbox</div>
+            <pre>запусти process_new.md</pre>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-title">Обновление публикаций</div>
+            <pre>запусти update_publications.md</pre>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-title">Добавить данные в таблицу</div>
+            <div class="cmd-desc">Даёшь скриншот выгрузки и говоришь:</div>
+            <pre>вот выгрузка за [период]. категоризируй транзакции
+и добавь в лист Transactions через Apps Script.
+не объясняй — сделай и выдай отчёт.</pre>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-title">Чистка документа</div>
+            <pre>прочитай [файл]. убери галлюцинации и подбадривание,
+оставь только то что реально применимо.
+сохрани все практические примеры и структуры.
+выдай очищенную версию.</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ЧАСТЬ 5 -->
+      <div class="part-divider" id="part5">
+        <span class="part-badge">Часть 5</span>
+        <div class="part-line"></div>
+      </div>
+      <h2 class="part-title">Какому инструменту — что</h2>
+
+      <section id="task-routing">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Задача</th><th>Инструмент</th><th>Почему</th></tr></thead>
+            <tbody>
+              <tr><td>Анализ, стратегия, идеи</td><td><span class="badge badge-claude">Claude (claude.ai)</span></td><td>Длинный диалог, память в Projects</td></tr>
+              <tr><td>Работа с файлами на компьютере</td><td><span class="badge badge-cowork">Cowork</span></td><td>Прямой доступ к файловой системе</td></tr>
+              <tr><td>Генерация кода с нуля</td><td><span class="badge badge-claude">Claude Code</span></td><td>1M контекст, видит весь репо</td></tr>
+              <tr><td>Написание кода в реальном времени</td><td><span class="badge badge-cursor">Cursor Auto</span></td><td>Минимальные лимиты, всегда включён</td></tr>
+              <tr><td>Review и рефакторинг</td><td><span class="badge badge-cursor">Cursor Composer</span></td><td>Multi-file, diff, apply в один клик</td></tr>
+              <tr><td>Автоматизация терминала</td><td><span class="badge badge-claude">Claude Code</span></td><td>Выполняет команды сам, проверяет результат</td></tr>
+              <tr><td>Обработка базы знаний</td><td><span class="badge badge-cowork">Cowork</span></td><td>Батч-обработка папок напрямую</td></tr>
+              <tr><td>Финансовый анализ по скриншотам</td><td><span class="badge badge-cowork">Cowork</span></td><td>Читает изображения + пишет в Sheets</td></tr>
+              <tr><td>Публикации (HTML-книги)</td><td><span class="badge badge-cursor">Cursor</span> + <span class="badge badge-claude">Claude Code</span></td><td>Cursor пишет, Claude Code деплоит</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Правила экономии токенов</h3>
+        <ul>
+          <li><strong>Читай только шапки</strong> — для метаданных файлов не нужен полный текст. Говори Cowork: "читай только первые 20 строк каждого файла"</li>
+          <li><strong>Один большой запрос</strong> лучше пяти маленьких — контекст загружается один раз</li>
+          <li><strong>Отчёт вместо диалога</strong> — "сделай и выдай отчёт" вместо пошагового обсуждения</li>
+          <li><strong>Sonnet вместо Opus</strong> — для большинства задач Sonnet 4.6 справляется, Opus резервируй для сложного синтеза</li>
+          <li><strong>_context.md</strong> — один файл вместо пересказа контекста каждый раз</li>
+        </ul>
+
+        <blockquote>
+          <p>Дорогая операция — та которую делаешь руками вместо скрипта. Токены дешевле твоего времени.</p>
+        </blockquote>
+      </section>
+
+      <div class="footer">
+        <span>AI-tools: Пайплайн с Claude и Cursor · Март 2026</span>
+        <span>Составлено с Claude · me+AI</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const btn = document.getElementById('themeBtn');
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    btn.textContent = isDark ? '🌙 Тёмная' : '☀️ Светлая';
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  }
+  const saved = localStorage.getItem('theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+    btn.textContent = saved === 'dark' ? '☀️ Светлая' : '🌙 Тёмная';
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('open');
+  }
+
+  // Active TOC
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const links = document.querySelectorAll('.toc-nav a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.toc-nav a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
